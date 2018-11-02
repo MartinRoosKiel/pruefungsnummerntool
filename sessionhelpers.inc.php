@@ -28,9 +28,34 @@ function get_suche($nachname,$vorname)
 * @param string $nachname
 * @return array
 */
+function get_brevet($nachname,$vorname)
+{ 
+	$rV = array("Vorname","Nachname","Pruefungsnummer","Datum", "Ausbilder");
+	$sql = "SELECT wh.Vorname, wh.Nachname, wh.Nummer, wh.Datum, wh.Name 
+FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum', pr.Nummer, us.Name from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id left join users us ON pr.AusbilderId = us.UserId) 
+      UNION (select pr.Vorname, Nachname, Datum, pr.Nummer, us.Name from `wiederholung` wh join `pruefung` pr on pr.Name = wh.Nachname and pr.Vorname = wh.Vorname left join users us ON wh.AusbilderId = us.UserId  group by Vorname, Nachname 
+)) 
+as wh 
+WHERE wh.datum = (SELECT MAX(wh2.datum) FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname)) 
+as wh2 
+WHERE wh2.vorname = wh.vorname and wh2.nachname = wh.nachname) and Datum > (Date(now()- INTERVAL 6 YEAR)) and wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%'
+ORDER BY `wh`.`Vorname` ASC"
+	$erg = mysqli_query(DBi::$con,$sql);
+	while($row = mysqli_fetch_array($erg))
+	{
+			array_push($rV,$row[0],$row[1],$row[2],$row[3],$row[4]);	
+	}
+	return $rV;
+}
+
+/**
+* @param string $vorname
+* @param string $nachname
+* @return array
+*/
 function get_wiederholung($nachname,$vorname)
 { 
-	$rV = array("Vorname","Nachname","Datum", "Ausbilder");
+	$rV = array("Vorname","Nachname","Pruefungsnummer","Datum", "Ausbilder");
 	$sql = "SELECT wiederholung.Vorname,wiederholung.Nachname,MAX(wiederholung.Datum),users.Name from `wiederholung` Inner join users ON wiederholung.AusbilderId = users.UserId WHERE wiederholung.Vorname LIKE '%".$vorname."%' AND wiederholung.Nachname LIKE '%".$nachname."%' GROUP BY Vorname, Nachname";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))

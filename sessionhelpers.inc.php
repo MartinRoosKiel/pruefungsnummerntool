@@ -1,5 +1,13 @@
 <?php
-include_once('connect.inc.php');
+include('connect.inc.php');
+
+/**
+ * @return void
+ */
+function connect () {
+   
+    DBi::$con = mysqli_connect('localhost', USERNAME, PASSWORD) or exit(mysqli_connect_error());
+mysqli_select_db( DBi::$con,TABLE) or exit(mysqli_connect_error());}
 
 class DBi{
 	public static $con;
@@ -13,7 +21,7 @@ class DBi{
 function get_suche($nachname,$vorname)
 { 
 	$rV = array("Vorname","Nachname","Pruefungsnummer","Ausbilder");
-	$sql = "SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE '%".$vorname."%' AND pruefung.Name LIKE '%".$nachname."%' GROUP BY pruefung.Vorname, pruefung.Name";
+	$sql = "SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE '%".$vorname."%' AND pruefung.Name LIKE '%".$nachname."%'";
 	
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))
@@ -39,7 +47,7 @@ as wh
 WHERE wh.datum = (SELECT MAX(wh2.datum) FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname)) 
 as wh2 
 WHERE wh2.vorname = wh.vorname and wh2.nachname = wh.nachname) and Datum > (Date(now()- INTERVAL 6 YEAR)) and wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%'
-ORDER BY `wh`.`Vorname` ASC"
+ORDER BY `wh`.`Vorname` ASC";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))
 	{
@@ -55,7 +63,7 @@ ORDER BY `wh`.`Vorname` ASC"
 */
 function get_wiederholung($nachname,$vorname)
 { 
-	$rV = array("Vorname","Nachname","Pruefungsnummer","Datum", "Ausbilder");
+	$rV = array("Vorname","Nachname","Datum", "Ausbilder");
 	$sql = "SELECT wiederholung.Vorname,wiederholung.Nachname,MAX(wiederholung.Datum),users.Name from `wiederholung` Inner join users ON wiederholung.AusbilderId = users.UserId WHERE wiederholung.Vorname LIKE '%".$vorname."%' AND wiederholung.Nachname LIKE '%".$nachname."%' GROUP BY Vorname, Nachname";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))
@@ -274,7 +282,7 @@ function get_pruefungen($jahr)
  * @param string $name
  * @param int $kurs
  * @param string $level
- * @return string prüfungsnummer
+ * @return string prï¿½fungsnummer
  */
 function eintragen_pruefung($name,$vorname,$kurs,$level,$ausbilderId)
 {
@@ -315,13 +323,7 @@ $db_erg = mysqli_query(DBi::$con,$sql);
 	
 }
 
-/**
- * @return void
- */
-function connect () {
-    DBi::$con = mysqli_connect('localhost', '*user*', '*pass*') or exit(mysqli_connect_error());
-    mysqli_select_db( DBi::$con,'id1753558_joomla') or exit(mysqli_connect_error());
-}
+
 
 /**
  * @param kurs 
@@ -333,7 +335,7 @@ function next_number($kurs)
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die('Ungültige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
+		die('Ungï¿½ltige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
 	}
 	$row = mysqli_fetch_row($db_erg);
 	$rV = $row[0]+1;
@@ -351,7 +353,7 @@ function kurs_daten()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die('Ungültige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
+		die('Ungï¿½ltige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
 	}
 	return $db_erg;
 }
@@ -367,7 +369,7 @@ function get_ausbilder()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die('Ungültige Abfrage:'.mysql_error(DBi::$con).' sql:'.$sql);	
+		die('Ungï¿½ltige Abfrage:'.mysql_error(DBi::$con).' sql:'.$sql);	
 	}
 	return $db_erg;
 }
@@ -383,7 +385,7 @@ function jahreszahlen()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die('Ungültige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
+		die('Ungï¿½ltige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
 	}
 	return $db_erg;
 }
@@ -399,7 +401,7 @@ function lvov()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die('Ungültige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
+		die('Ungï¿½ltige Abfrage:'.mysqli_error(DBi::$con).' sql:'.$sql);	
 	}
 	return $db_erg;
 }
@@ -417,7 +419,7 @@ function get_user_level($userID)
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if ( ! $db_erg )
 	{
-  		die('Ungültige Abfrage: ' . mysqli_error(DBi::$con));
+  		die('Ungï¿½ltige Abfrage: ' . mysqli_error(DBi::$con));
 	}
 	$zeile = mysqli_fetch_row($db_erg);
 	$rv = $zeile[0];
@@ -434,7 +436,7 @@ function user_data($userID)
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if ( ! $db_erg )
 	{
-  		die('Ungültige Abfrage: ' . mysqli_error(DBi::$con));
+  		die('Ungï¿½ltige Abfrage: ' . mysqli_error(DBi::$con));
 	}
 	$zeile = mysqli_fetch_row($db_erg);
 	$rv[0] = $zeile[0];

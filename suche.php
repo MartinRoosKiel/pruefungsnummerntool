@@ -39,7 +39,7 @@ Bitte geben sie den Namen m&ouml;glichst vollst&auml;ndig an!
 echo '<input  type="submit" name="submit" value="Abfragen">';
 }
 else {
-	echo 'Im Demomodus sind keine Eintragungen möglich.';
+	echo 'Im Demomodus sind keine Eintragungen mï¿½glich.';
 } ?>
 		
 	</td>
@@ -79,12 +79,25 @@ echo "letzte Wiederholung:";
 echo "<table>";
 	while($i<$x)
 	{
-		echo "<tr><td>".$erg[$i]."</td><td>".$erg[$i+1]."</td><td>".$erg[$i+2]."</td><td>".$erg[$i+3]."</td><tr>";
-		$i = $i+4;
+		echo "<tr><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><tr>";
+		
 
 	}
 echo "</table>";
+echo "Ergebnis der Suche der letzten 6 Jahre";
+	$erg = get_brevet($_POST['nachname'],$_POST['vorname']);
 
+	$x = count($erg);
+	$i = 0;
+
+echo "<table>";
+	while($i<$x)
+	{
+		echo "<tr><td>".$erg[$i]."</td><td>".$erg[$i+1]."</td><td>".$erg[$i+2]."</td><td>".$erg[$i+3]."</td><td>".$erg[$i+4]."</td><tr>";
+		$i = $i+5;
+
+	}
+echo "</table>";
 }
 
 

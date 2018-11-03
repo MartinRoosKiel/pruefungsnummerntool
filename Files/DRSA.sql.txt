@@ -1,0 +1,35 @@
+(select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname)
+
+
+SELECT *
+FROM `wiederholung` wh
+WHERE wh.datum = (SELECT MAX(wh2.datum) FROM `wiederholung` wh2 WHERE wh2.vorname = wh.vorname and wh2.nachname = wh.nachname)
+GROUP BY wh.vorname, wh.nachname  
+ORDER BY `wh`.`Vorname` ASC
+
+
+
+SELECT *
+FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname))
+as wh
+WHERE wh.datum = (SELECT MAX(wh2.datum) FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname))
+ as wh2 WHERE wh2.vorname = wh.vorname and wh2.nachname = wh.nachname)
+GROUP BY wh.vorname, wh.nachname  
+ORDER BY `wh`.`Vorname` ASC
+
+Date(now()- INTERVAL 6 YEAR)
+
+
+
+SELECT wh.Vorname, wh.Nachname, wh.Datum, wh.Nummer 
+FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum', pr.Nummer from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select pr.Vorname, Nachname, Datum, pr.Nummer from `wiederholung` wh join `pruefung` pr on pr.Name = wh.Nachname and pr.Vorname = wh.Vorname  group by Vorname, Nachname)) 
+as wh 
+WHERE wh.datum = (SELECT MAX(wh2.datum) FROM ((select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as 'Datum' from `pruefung` pr left join `kurse` kr on pr.kurs = kr.id) UNION (select Vorname, Nachname, max(Datum) from `wiederholung` wh group by Vorname, Nachname)) 
+as wh2 
+WHERE wh2.vorname = wh.vorname and wh2.nachname = wh.nachname) and Datum > (Date(now()- INTERVAL 6 YEAR)) 
+ORDER BY `wh`.`Vorname` ASC
+
+
+Select pr.Vorname, pr.Name, ks.ende as Datum, pr.Nummer from pruefung pr join kurse ks on pr.Kurs = ks.laufende_nummer left join wiederholung wh on wh.Nachname = pr.Name and wh.Vorname = pr.Vorname where datum = (Select max(Datum)(Select max(wh.Datum) from wiederholung wh where wh.Vorname Like 'Martin' and wh.Nachname Like 'Roos') Union (Select max(ks.Ende) as Datum from pruefung pr left join kurse ks on ks.laufende_nummer = pr.Kurs where pr.Vorname Like 'Martin' and pr.Name Like 'Roos')) and pr.Vorname Like 'Martin' and pr.Name Like 'Roos' order by pr.Nummer ASC 
+
+Select * from ((Select pr.vorname, pr.Name, ks.Ende as Datum from pruefung pr join kurse ks on pr.Kurs = ks.id) Union (Select pr.Vorname, pr.Name, wh.Datum from pruefung pr left join wiederholung wh on pr.name = wh.Nachname and pr.Vorname = wh.Vorname )) as DT where DT.Vorname Like 'Martin' and DT.Name LIKE 'Roos' 

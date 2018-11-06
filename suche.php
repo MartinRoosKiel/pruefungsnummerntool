@@ -57,33 +57,7 @@ else {
 if(isset($_POST['submit']))
 {
 echo "Ergebnis der Suche ";
-	$erg = get_suche($_POST['nachname'],$_POST['vorname']);
 
-	$x = count($erg);
-	$i = 0;
-
-echo "<table>";
-	while($i<$x)
-	{
-		echo "<tr><td>".$erg[$i]."</td><td>".$erg[$i+1]."</td><td>".$erg[$i+2]."</td><td>".$erg[$i+3]."</td><tr>";
-		$i = $i+4;
-
-	}
-echo "</table>";
-echo "letzte Wiederholung:";
-	$erg = get_wiederholung($_POST['nachname'],$_POST['vorname']);
-
-	$x = count($erg);
-	$i = 0;
-
-echo "<table>";
-	while($i<$x)
-	{
-		echo "<tr><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><td>".$erg[$i++]."</td><tr>";
-		
-
-	}
-echo "</table>";
 echo "Ergebnis der Suche der letzten 6 Jahre";
 	$erg = get_brevet($_POST['nachname'],$_POST['vorname']);
 
@@ -94,8 +68,7 @@ echo "<table>";
 	while($i<$x)
 	{
 		echo "<tr><td>".$erg[$i]."</td><td>".$erg[$i+1]."</td><td>".$erg[$i+2]."</td><td>".$erg[$i+3]."</td><td>".$erg[$i+4]."</td><tr>";
-		$i = $i+5;
-
+$i = $i+5;
 	}
 echo "</table>";
 }

@@ -1,0 +1,11 @@
+﻿dist: trusty
+
+addons:
+  sonarcloud:
+    organization: "martinrooskiel"
+    token:
+      secure: "travis encrypt fb41e87249fd1ed4fa291649c0fdef2dfb02e3be" # encrypted value of your token
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner

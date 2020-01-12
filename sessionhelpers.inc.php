@@ -89,65 +89,7 @@ function get_statistik_LVOV($jahr, $lvov)
 { 
 
 	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%' AND `Verband` = ".$lvov;
-	$erg = mysqli_query(DBi::$con,$sql);
-	$bronze = 0;
-	$silber = 0;
-	$gold = 0;
-	$junior = 0;
-	$retter = 0;
-	$leiter = 0;
-	$bs = 0;
-	$bb = 0;
-	$asr = 0;
-	$multiwr = 0;
-
-	
-	while($row = mysqli_fetch_array($erg))
-	{
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-B%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$bronze = $bronze + mysqli_num_rows($erg2);
-
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-S%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$silber = $silber + mysqli_num_rows($erg2);
-
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-G%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$gold = $gold + mysqli_num_rows($erg2);
-		
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-J%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$junior = $junior + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-WR%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$retter = $retter + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-WL%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $leiter + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BS%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $bs + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BB%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $bb + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-asr%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $asr + mysqli_num_rows($erg2);
-		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-mw%' ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $multiwr + mysqli_num_rows($erg2);
-	}
-
-	$rV = array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
-	return $rV;
+	return get_statistik_bySQL($sql);
 }
 
 /**
@@ -158,7 +100,13 @@ function get_statistik($jahr)
 { 
 
 	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%';";
-	$erg = mysqli_query(DBi::$con,$sql);
+	return get_statistik_bySQL($sql);
+
+}
+
+function get_statistik_bySQL($sql)
+{
+		$erg = mysqli_query(DBi::$con,$sql);
 	$bronze = 0;
 	$silber = 0;
 	$gold = 0;
@@ -219,6 +167,7 @@ function get_statistik($jahr)
 	$rV = array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
 	return $rV;
 }
+	
 /**
 * @param string $jahr
 * @param string $lvov

@@ -4,10 +4,15 @@ include('connect.inc.php');
 /**
  * @return void
  */
+ 
+ $fname = "Vorname";
+ $name ="Nachname";
+ $pnumber = "Pruefungsnummer";
+ $ausbilder = "Ausbilder";
 function connect () {
    
-    DBi::$con = mysqli_connect('localhost', USERNAME, PASSWORD) or exit(mysqli_connect_error());
-mysqli_select_db( DBi::$con,TABLE) or exit(mysqli_connect_error());}
+    DBi::$con = mysqli_connect('localhost', USERNAME, PASSWORD) || exit(mysqli_connect_error());
+mysqli_select_db( DBi::$con,TABLE) || exit(mysqli_connect_error());}
 
 class DBi{
 	public static $con;
@@ -20,7 +25,7 @@ class DBi{
 */
 function get_suche($nachname,$vorname)
 { 
-	$rV = array("Vorname","Nachname","Pruefungsnummer","Ausbilder");
+	$rV = array($fname,$name,$pnumber,$ausbilder);
 	$sql = "SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE '%".$vorname."%' AND pruefung.Name LIKE '%".$nachname."%'";
 	
 	$erg = mysqli_query(DBi::$con,$sql);
@@ -38,7 +43,7 @@ function get_suche($nachname,$vorname)
 */
 function get_brevet($nachname,$vorname)
 { 
-	$rV = array("Vorname","Nachname","Pruefungsnummer","Datum", "Ausbilder");
+	$rV = array($fname,$name,$pnumber,"Datum", $ausbilder);
 	$sql = "Select Vorname, Nachname,  Nummer, Datum, Ausbilder from ( (Select pr.Vorname as Vorname, pr.Name as Nachname, ks.Ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse ks on pr.kurs = ks.id join users us on us.UserId = pr.AusbilderId) union (Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userId = wh.AusbilderId)) as daten where Datum = (Select max(datum) from ((Select ks.Ende as Datum from pruefung pr join kurse ks on pr.kurs = ks.id where pr.Vorname LIKE '%".$vorname."%' and pr.Name LIKE '%".$nachname."%' ) Union ( Select wh.Datum as Datum from wiederholung wh where wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%' )) as datum ) AND daten.Vorname LIKE '%".$vorname."%' and daten.Nachname LIKE '%".$nachname."%'  and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year)))";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))
@@ -55,7 +60,7 @@ function get_brevet($nachname,$vorname)
 */
 function get_wiederholung($nachname,$vorname)
 { 
-	$rV = array("Vorname","Nachname","Datum", "Ausbilder");
+	$rV = array($fname,$name,"Datum", $ausbilder);
 	$sql = "SELECT wiederholung.Vorname,wiederholung.Nachname,MAX(wiederholung.Datum),us.Name from `wiederholung` Inner join users us ON wiederholung.AusbilderId = users.UserId WHERE wiederholung.Vorname LIKE '%".$vorname."%' AND wiederholung.Nachname LIKE '%".$nachname."%' GROUP BY Vorname, Nachname";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))

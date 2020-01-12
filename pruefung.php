@@ -16,21 +16,23 @@ if ( logged_in() ) {
 
 if(isset($_POST['nachname'])&isset($_POST['vorname'])&isset($_POST['kurs'])&isset($_POST['level'])&isset($_POST['ausbilderId']))
 {
-if(logged_in()){
-	$nachname = $_POST['nachname'];
-	$vorname = $_POST['vorname'];
-	$kurs = $_POST['kurs'];
-	$level = $_POST['level'];
-	$ausbilderId = $_POST['ausbilderId'];
- 	echo "<br><hr>";
-	echo "letzter Eintrag <br> Name: ".$nachname."<br> Vorname: ";
-	echo $vorname."<br> Kurs: ".$kurs."<br> Level: ".$level."<br>";
-	$erg = eintragen_pruefung($nachname,$vorname,$kurs,$level,$ausbilderId);
-	echo "Pruefungsnummer: ".$erg;
-	echo "<hr>";
-}
-else
-echo "Sie sind nicht eingeloggt!";
+	if(logged_in()){
+		$nachname = $_POST['nachname'];
+		$vorname = $_POST['vorname'];
+		$kurs = $_POST['kurs'];
+		$level = $_POST['level'];
+		$ausbilderId = $_POST['ausbilderId'];
+		echo "<br><hr>";
+		echo "letzter Eintrag <br> Name: ".htmlspecialchars($nachname)."<br> Vorname: ";
+		echo htmlspecialchars($vorname)."<br> Kurs: ".htmlspecialchars($kurs)."<br> Level: ".htmlspecialchars($level)."<br>";
+		$erg = eintragen_pruefung($nachname,$vorname,$kurs,$level,$ausbilderId);
+		echo "Pruefungsnummer: ".$erg;
+		echo "<hr>";
+	}
+	else
+	{
+		echo "Sie sind nicht eingeloggt!";
+	}
 }
 
 

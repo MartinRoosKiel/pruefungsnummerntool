@@ -24,8 +24,7 @@ echo '<a class="menu" href="statistik.php">Statistik</a>';
 if($_SESSION['usrlevel'] != 1) {	
 	echo '<a class="menu" href="kurse.php">Kurse</a>';
 	echo '<a class="menu" href="pruefung.php">Pr&uuml;fung</a>';
-	
-echo '<a class="menu" href="wiederholung.php">Wiederholungen</a>';
+	echo '<a class="menu" href="wiederholung.php">Wiederholungen</a>';
 }
 echo '<a class="menu" href="suche.php">Suche</a>';
 ?>

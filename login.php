@@ -3,20 +3,29 @@
 session_start();
 include_once('sessionhelpers.inc.php');
 
+while(session_status() == PHP_SESSION_NONE){
+	sleep(1);
+}
+
 if ( isset($_POST['login']) ) {
     $userid = check_user($_POST['username'], $_POST['userpass']);
     if ( $userid ) {
 		$userlevel = get_user_level($userid);
-	$_SESSION['name'] = $_POST['username'];
-	$_SESSION['userid'] = $userid;
-	$_SESSION['usrlevel'] = $userlevel;
-        login($userid);
-    } else {
-        echo '<p>Ihre Anmeldedaten waren nicht korrekt!</p>';
-    }
+		$_SESSION['name'] = $_POST['username'];
+		$_SESSION['userid'] = $userid;
+		$_SESSION['usrlevel'] = $userlevel;
+        login($userid);   
+    } 
+	else {
+        $errorMessage = '<p>Ihre Anmeldedaten waren nicht korrekt!</p>';
+    } 
 }
 
 if ( !logged_in() ) {
+	
+if(isset($errorMessage)) {
+    echo $errorMessage;
+}
     echo <<<END
 	 <div align="center">
 <img src="images/pic_header_claim.png">
@@ -39,9 +48,17 @@ if ( !logged_in() ) {
 </table>
 </form>
 END;
-} else {
-    header("Location:index.php");
-
+}
+else
+{ 	
+echo <<<END
+Die Seite wird aktualisiert!
+<script language="javascript" type="text/javascript">
+<!--
+window.setTimeout('window.location = "index.php"',1000);
+// –>
+</script>
+END;
 }
 
 ?>

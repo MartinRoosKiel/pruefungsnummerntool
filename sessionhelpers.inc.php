@@ -661,7 +661,7 @@ function logged_in () {
  * @return void
  */
 function logout () {
-    $sql = 'UPDATE users SET UserSession = NULL WHERE UserSession = \'' . session_id() . '\'';
+    $sql = 'UPDATE users SET UserSession = \'\' WHERE UserSession = \'' . session_id() . '\'';
     if ( mysqli_query(DBi::$con,$sql) ) {
         exit(mysqli_error(DBi::$con));
     }

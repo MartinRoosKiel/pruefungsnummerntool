@@ -33,7 +33,7 @@ ob_end_flush();
 <fieldset>
 <legend>neuer Kurs</legend>
 <p>
-	<label>	Kursnummer</label>
+	<label for="nummer">	Kursnummer</label>
 	<input name="nummer" type="text" size="20">
 	</p>
 <p>

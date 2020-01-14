@@ -42,21 +42,34 @@ if(isset($_POST['nachname'])&isset($_POST['vorname'])&isset($_POST['kurs'])&isse
 
 
 
-<table>
 <form  action="pruefung.php" method="post">
-
-<tr><td>Name </td><td><input name="nachname" type="text" value =""></td></tr>
-<tr><td>Vorname </td><td><input name="vorname" type="text" value =""></td></tr>
-<tr><td>Kurs </td><td> <select name = "kurs">
+<fieldset>
+<legend>neue Pr&uuml;fung</legend>
+<p>
+	<label>	Kursnummer</label>
+	<input name="nummer" type="text" size="20">
+</p>
+<p>
+	<label for="nachname">Name </label>
+	<input name="nachname" type="text" value ="">
+</p>
+<p>
+	<label for="vorname">Vorname </label>
+	<input name="vorname" type="text" value ="">
+</p>
+<p>
+	<label for="kurs">Kurs </label> 
+	<select name = "kurs">
 	
 				<?php
 				$erg = kurs_daten();
 				echo kursSelector($erg);
 				?>
-	</td>
-</tr>	
-<tr><td>Level</td>
-	<td>
+    </select>
+</p>
+<p>
+	<label for="level">Level</label>
+	
 		<select name="level">
 		<option value="B">Bronze</option>
 		<option value="S">Silber</option>
@@ -67,45 +80,36 @@ if(isset($_POST['nachname'])&isset($_POST['vorname'])&isset($_POST['kurs'])&isse
 		<option value="BS">Bootsf&uuml;hrer See</option>
 		<option value="BB">Bootsf&uuml;hrer Binnen</option>
 		<option value="MW">Multiplikator Wasseretter</option>
-	</td>
-</tr>
-<tr><td>Ausbilder</td>
-<td> <select name = "ausbilderId">
-<?php
+		</select>
+	<p>
+<p>
+	<label for="ausbilderId">Ausbilder</label>
+	<select name = "ausbilderId">
+		<?php
 				$erg = get_ausbilder();
 				echo ausbilderSelector($erg);
 			 ?>
-</td>
+</p>
 
-</tr>
-		
-<tr>
-	<td>	<?php if($_SESSION['usrlevel'] >= 2) {
-echo '<input  type="submit" name="submit" value="Absenden">';
+	<?php if($_SESSION['usrlevel'] >= 2) {
+echo '<p><input  type="submit" name="submit" value="Absenden"></p>';
 }
 else {
 	echo 'Im Demomodus sind keine Eintragungen möglich.';
 } ?>
 		
-	</td>
-</tr>
+	</fieldset>
 </form>
-</table>
 
 <hr>
 
-<table>
-	<tr>
-		<td>
+
 			<table>
-			<tr><td>Nummer</td><td>Beginn</td><td>Ende</td><td>LV / OV</td><td>Kursbeschreibung</td></tr>
+			<tr><th scope="col">Nummer</th><th scope="col">Beginn</th><th scope="col">Ende</th><th scope="col">LV / OV</th><th scope="col">Kursbeschreibung</th></tr>
 			<?php
 				$erg = kurs_daten();
 				$kursListe = listeKurse($erg);
 				echo htmlspecialchars_decode($kursListe);
 			 ?>
 			</table>
-		</td>
-	</tr>
-</table>
-
+		

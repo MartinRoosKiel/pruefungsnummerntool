@@ -173,8 +173,7 @@ function get_statistik_bySQL($sql)
 		
 	}
 
-	$rV = array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
-	return $rV;
+	return = array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
 }
 	
 /**
@@ -254,7 +253,7 @@ function eintragen_pruefung($name,$vorname,$kurs,$level,$ausbilderId)
 
 
 $sql = "INSERT INTO `pruefung` (`id`,`Vorname`,`Name`,`Kurs`,`Nummer`,`AusbilderId`) VALUES ('".$lfd."','".$vorname."','".$name."','".$kurs."', '".$rv."', '".$ausbilderId."');";
-$db_erg = mysqli_query(DBi::$con,$sql);
+mysqli_query(DBi::$con,$sql);
 
 	return $rv;
 	
@@ -269,7 +268,7 @@ function eintragen_wiederholung($name,$vorname,$datum,$ausbilderId)
 {
 
 $sql = "INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES ('".$vorname."','".$name."', '".$datum."', '".$ausbilderId."');";
-$db_erg = mysqli_query(DBi::$con,$sql);
+mysqli_query(DBi::$con,$sql);
 	
 }
 

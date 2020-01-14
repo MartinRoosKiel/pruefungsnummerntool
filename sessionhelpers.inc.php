@@ -15,7 +15,7 @@ function connect () {
    
     DBi::$con = new mysqli('localhost', USERNAME, PASSWORD, TABLE);
 	if(DBi::$con->connect_errno){ 
-		die("Verbindung fehlgeschlagen: " . $mysqli->connect_error);
+		die("Verbindung fehlgeschlagen: " . DBi::$con->connect_error);
 		}
 }
 

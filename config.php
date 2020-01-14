@@ -16,32 +16,29 @@ if ( logged_in() ) {
 
 $usrl = $_SESSION['usrlevel'];
 $userId = $_SESSION['userid'];
-if(isset($_SESSION['email'])){
-	$eMail = $_SESSION['email'];
+if(isset($_POST['email'])){
+	$eMail = $_POST['email'];
 }
 if(isset($_POST['username'])) {
 	$user = $_POST['username'];
 }
-$hLocation = "Location:config.php";
 
  if(isset($_POST['change']))
 {
 	if($usrl > 2) 
 	{
 		echo change_userdata($user,$eMail,$userId,$_POST['name'],$_POST['asr'],$_POST['atr']);
-		header($hLocation);
+		
 	}
 	else
 	{
 		echo change_userdata($user,$eMail,$userId,"","","");
-		header($hLocation);
 	}
 }
 
  if(isset($_POST['changePass']))
 {
  	echo change_pass($_POST['pass'],$userId);
-	   header($hLocation);
 }
 if($usrl > 2) {
 	if(isset($_POST['insertUser']))

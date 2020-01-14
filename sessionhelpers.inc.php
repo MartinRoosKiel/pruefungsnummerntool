@@ -155,19 +155,19 @@ function get_statistik_bySQL($sql)
 		
 		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BS%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $bs + mysqli_num_rows($erg2);
+		$bs = $bs + mysqli_num_rows($erg2);
 		
 		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BB%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $bb + mysqli_num_rows($erg2);
+		$bb = $bb + mysqli_num_rows($erg2);
 		
 		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-asr%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $asr + mysqli_num_rows($erg2);
+		$asr = $asr + mysqli_num_rows($erg2);
 		
 		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-mw%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$leiter = $multiwr + mysqli_num_rows($erg2);
+		$multiwr = $multiwr + mysqli_num_rows($erg2);
 		
 		
 		

@@ -76,6 +76,7 @@ else {
 
 
 			<table>
+			<caption>vorhandene Kurse</caption>
 			<tr><th scope="col">Nummer</th><th scope="col">Beginn</th><th scope="col">Ende</th><th scope="col">LV / OV</th><th scope="col">Kursbeschreibung</th></tr>
 			<?php
 				$erg = kurs_daten();

@@ -17,80 +17,65 @@ if ( logged_in() )
 
 if(isset($_POST['eintragen']))
 {
-if(logged_in()){
-	$erg =eintragen_kurs($_POST['nummer'],$_POST['begin'],$_POST['ende'],$_POST['kommentar'],$_POST['verband']);
-	header("location:kurse.php");}
-else
-echo "Sie sind nicht eingeloggt!";
+	if(logged_in()){
+		$erg =eintragen_kurs($_POST['nummer'],$_POST['begin'],$_POST['ende'],$_POST['kommentar'],$_POST['verband']);
+		header("location:kurse.php");
+	}
+	else{
+		echo "Sie sind nicht eingeloggt!";
+	}
 }
 ob_end_flush();
 ?>
 
 
 <form method="post" action="kurse.php">
-<table border="0" cellpadding="0" cellspacing="4">
-<tr>
-	<td>
-		Kursnummer
-	</td>
-	<td>
-		<input name="nummer" type="text" size="20">
-	</td>
-</tr>
-<tr>
-	<td>
-		Startdatum
-	</td>
-	<td>
+<fieldset>
+<p>
+	<label>	Kursnummer</label>
+	<input name="nummer" type="text" size="20">
+	</p>
+<p>
+		<label for="begin">Startdatum
+	
 		<input name="begin" type="text" size="20">
-	</td>
-</tr>
-<tr>
-	<td>
-		Enddatum
-	</td>
-	<td>
+		</label>
+	</p>
+<p>
+		<label for="ende">Enddatum
+	
 		<input name="ende" type="text" size="20">
-	</td>
-</tr>
-<tr>
-	<td>
-		LV/OV Nummer
-	</td>
-	<td>
+		</label>
+	</p>
+	<p>
+		<label for="verband">LV/OV Nummer
+	
 		<input name="verband" type="text" size="20">
-	</td>
-</tr>
-<tr>
-	<td>
-		Kursbeschreibung
-	</td>
-	<td>
+		</label>
+	</p>
+	<p>
+		<label for="kommentar">Kursbeschreibung
+	
 		<input name="kommentar" type="text" size="20">
-	</td>
-</tr>
-<tr>
-	<td>
+		</label>
+	</p>
 	<?php if($_SESSION['usrlevel'] >= 2) {
-echo '<input  type="submit" name="eintragen" value="Speichern">';
+		
+echo '<p><input  type="submit" name="eintragen" value="Speichern"></p>'; 
 }
 else {
 	echo 'Im Demomodus sind keine Eintragungen möglich.';
 } ?>
 		
-	</td>
-</tr>
-</table>
+</fieldset>
 </form>
 <hr>
 
 
 
-<table>
-	<tr>
-		<td>
+
 			<table>
-			<tr><td>Nummer</td><td>Beginn</td><td>Ende</td><td>LV / OV</td><td>Kursbeschreibung</td></tr>
+			<tr><th>Nummer</th><th>Beginn</th><th>Ende</th><th>LV / OV</th><th>Kursbeschreibung</th></tr>
 			<?php
 				$erg = kurs_daten();
 				$kursListe = listeKurse($erg);
@@ -98,7 +83,5 @@ else {
 				
 			 ?>
 			</table>
-		</td>
-	</tr>
-</table>
+		
 

@@ -16,8 +16,12 @@ if ( logged_in() ) {
 
 $usrl = $_SESSION['usrlevel'];
 $userId = $_SESSION['userid'];
-$eMail = $_SESSION['email'];
-$user = $_POST['username'];
+if(isset($_SESSION['email'])){
+	$eMail = $_SESSION['email'];
+}
+if(isset($_POST['username'])) {
+	$user = $_POST['username'];
+}
 $hLocation = "Location:config.php";
 
  if(isset($_POST['change']))

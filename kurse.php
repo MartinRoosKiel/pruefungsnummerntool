@@ -31,6 +31,7 @@ ob_end_flush();
 
 <form method="post" action="kurse.php">
 <fieldset>
+<legend>neuer Kurs</legend>
 <p>
 	<label>	Kursnummer</label>
 	<input name="nummer" type="text" size="20">
@@ -75,7 +76,7 @@ else {
 
 
 			<table>
-			<tr><th>Nummer</th><th>Beginn</th><th>Ende</th><th>LV / OV</th><th>Kursbeschreibung</th></tr>
+			<tr><th scope="col">Nummer</th><th scope="col">Beginn</th><th scope="col">Ende</th><th scope="col">LV / OV</th><th scope="col">Kursbeschreibung</th></tr>
 			<?php
 				$erg = kurs_daten();
 				$kursListe = listeKurse($erg);

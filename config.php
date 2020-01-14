@@ -14,34 +14,39 @@ if ( !logged_in() ) {
 if ( logged_in() ) {
 	include_once('header.php'); 
 
+$usrl = $_SESSION['usrlevel'];
+$userId = $_SESSION['userid'];
+$eMail = $_SESSION['email'];
+$user = $_POST['username'];
+$hLocation = "Location:config.php";
 
  if(isset($_POST['change']))
 {
-	if($_SESSION['usrlevel'] > 2) 
+	if($usrl > 2) 
 	{
-		echo change_userdata($_POST['username'],$_POST['email'],$_SESSION['userid'],$_POST['name'],$_POST['asr'],$_POST['atr']);
-		header("Location:config.php");
+		echo change_userdata($user,$eMail,$userId,$_POST['name'],$_POST['asr'],$_POST['atr']);
+		header($hLocation);
 	}
 	else
 	{
-		echo change_userdata($_POST['username'],$_POST['email'],$_SESSION['userid'],"","","");
-		header("Location:config.php");
+		echo change_userdata($user,$eMail,$userId,"","","");
+		header($hLocation);
 	}
 }
 
  if(isset($_POST['changePass']))
 {
- 	echo change_pass($_POST['pass'],$_SESSION['userid']);
-	   header("Location:config.php");
+ 	echo change_pass($_POST['pass'],$userId);
+	   header($hLocation);
 }
-if($_SESSION['usrlevel'] > 2) {
+if($usrl > 2) {
 	if(isset($_POST['insertUser']))
 	{
-		echo insert_user($_POST['username'],$_POST['name'],$_POST['asr'],$_POST['atr'],$_POST['pass'],$_POST['email'],$_POST['level']);
+		echo insert_user($user,$_POST['name'],$_POST['asr'],$_POST['atr'],$_POST['pass'],$eMail,$_POST['level']);
 	}	
 		if(isset($_POST['deleteUser']))
 	{
-		echo delete_user($_POST['username'],$_POST['level']);
+		echo delete_user($user,$_POST['level']);
 	}	
 }
 
@@ -49,7 +54,7 @@ if($_SESSION['usrlevel'] > 2) {
 
 
 
-$zeile =  user_data($_SESSION['userid']);
+$zeile =  user_data($userId);
 
 echo <<<END
 <form method="post" action="config.php">
@@ -80,22 +85,22 @@ Level: </td><td> <select name="level"><option value = "0">Demo</option><option v
 </td></tr>
 <tr><td>
 END;
-if($_SESSION['usrlevel'] >= 1) {
+if($usrl >= 1) {
 echo '<input type="submit" name="change" value="&auml;ndere Nutzerdaten"></td><td><input type="submit" name="changePass" value="&auml;ndere Passwort">';
 
 }
-if($_SESSION['usrlevel'] > 2) {
+if($usrl > 2) {
 echo '<input type="submit" name="insertUser" value="Nutzer eintragen">';
 echo '<input type="submit" name="deleteUser" value="Nutzer entfernen">';
 
 
 }
-if($_SESSION['usrlevel'] == 0) {
+if($usrl == 0) {
 	echo 'Im Demomodus sind keine Eintragungen möglich.';
 }
 
 echo '</td></tr></table></form>';
-if($_SESSION['usrlevel'] > 2) {
+if($usrl > 2) {
 echo '<br><hr><br>';
 echo "<table><tr><th>Nutzername</th><th>Level</th></tr>";
 	$erg = get_users();

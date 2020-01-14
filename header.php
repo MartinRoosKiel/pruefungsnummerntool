@@ -7,15 +7,15 @@ a.menu:visited { color:#fff; background-color:#E60000; }
 a.menu:hover   { color:#E60000; background-color:#FFD633; }
 a.menu:active  { color:#E60000; background-color:#FFD633; }
  </style>
- <div align="center">
-<img src="images/pic_header_claim.png">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/logo_header_s2.png">
+ <div style="text-align:center; margin-left: auto; margin-right: auto;">
+<img src="images/pic_header_claim.png"  alt="header links Wir helfen hier und jetzt">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/logo_header_s2.png"  alt="125 Jahre ASB">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="images/pic_header_order_default.png">
+<img src="images/pic_header_order_default.png"  alt="banner rechts">
 <br><br>
-<div align="center">
+<div style="text-align:center; margin-left: auto; margin-right: auto;">
 <form><?php
 echo '<a class="menu" href="index.php">Willkommen '.$_SESSION['name'].'</a>';
 echo '<a class="menu" href="index.php">Startseite</a>';

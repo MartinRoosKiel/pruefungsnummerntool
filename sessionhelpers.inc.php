@@ -9,12 +9,15 @@ include('connect.inc.php');
  define("NAME","Nachname");
  define("PNUMBER","Pruefungsnummer");
  define("AUSBILDER","Ausbilder");
- defeine("DATUM","Datum");
+ define("DATUM","Datum");
  
 function connect () {
    
-    DBi::$con = mysqli_connect('localhost', USERNAME, PASSWORD) || exit(mysqli_connect_error());
-mysqli_select_db( DBi::$con,TABLE) || exit(mysqli_connect_error());}
+    DBi::$con = new mysqli('localhost', USERNAME, PASSWORD, TABLE);
+	if(DBi::$con->connect_errno){ 
+		die("Verbindung fehlgeschlagen: " . $mysqli->connect_error);
+		}
+}
 
 class DBi{
 	public static $con;
@@ -28,9 +31,8 @@ class DBi{
 function get_suche($nachname,$vorname)
 { 
 	$rV = array(FNAME,NAME,PNUMBER,AUSBIDLER);
-	$sql = "SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE '%".$vorname."%' AND pruefung.Name LIKE '%".$nachname."%'";
-	
-	$erg = mysqli_query(DBi::$con,$sql);
+	$erg = DBi::$con->prepare("SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE :vorname AND pruefung.Name LIKE :nachname");
+	$erg->execute(array('vorname' => concat("%",$vorname,"%"), 'nachname' => concat("%",$nachname,"%")));
 	while($row = mysqli_fetch_array($erg))
 	{
 			array_push($rV,$row[0],$row[1],$row[2],$row[3]);	

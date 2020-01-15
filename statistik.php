@@ -91,6 +91,7 @@ else {
     $trtd = "<tr><td>";
 	$tdetd = "</td><td>";
 	$tdetre = "</td></tr>";
+	$tabe ="</table>";
 
 if(isset($_POST['submit']))
 {
@@ -111,7 +112,7 @@ echo "<table><caption>Kurs</caption>";
 		$i = $i+2;
 
 	}
-echo "</table> ".$tdetd."</td><td valign=\"top\">";
+echo $tabe.$tdetd."</td><td valign=\"top\">";
 
 
 	$erg = get_statistik($jahr);
@@ -125,7 +126,7 @@ echo "<table><caption>Ausbildungslevel</caption>";
 		$i = $i+2;
 
 	}
-echo "</table>".$tdetre."</table>";
+echo $tabe.$tdetre.$tabe;
 
 }
 if(isset($_POST['go']))
@@ -146,7 +147,7 @@ echo "<table> <caption>Kurs</caption>";
 		$i = $i+2;
 
 	}
-echo "</table> </td><td></td><td valign=\"top\">";
+echo $tabe." </td><td></td><td valign=\"top\">";
 
 
 	$erg = get_statistik_LVOV($jahr,$lvov);
@@ -160,7 +161,7 @@ echo "<table><caption>Ausbildungslevel</caption>";
 		$i = $i+2;
 
 	}
-echo "</table>".$tdetre."</table>";
+echo $tabe.$tdetre.$tabe;
 
 }
 

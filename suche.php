@@ -22,30 +22,25 @@ if ( logged_in() ) {
 Bitte geben sie den Namen m&ouml;glichst vollst&auml;ndig an!
 
 
-<table>
 <form  action="suche.php" method="post">
+<fieldset>
+<legend>Suche</legend>
 
-<tr><td>Vorname </td><td> <input type = "text" name = "vorname"> </input>
-	
-			
-	</td>
-</tr>	
-<tr>
-	<td>Nachname </td><td> <input type = "text" name = "nachname"> </input>
-		</td>
-</tr>
-<tr>
-	<td><?php if($_SESSION['usrlevel'] >= 1) {
-echo '<input  type="submit" name="submit" value="Abfragen">';
+<p><label for="vorname">Vorname</label> <input type = "text" name = "vorname">
+</p>	
+<p>
+	<label for="nachname">Nachname</label> <input type = "text" name = "nachname"> 
+		</p>
+	<?php if($_SESSION['usrlevel'] >= 1) {
+echo '<p><input  type="submit" name="submit" value="Abfragen"></p>';
 }
 else {
 	echo 'Im Demomodus sind keine Eintragungen m�glich.';
 } ?>
 		
-	</td>
-</tr>
+	
+</fieldset>
 </form>
-</table>
 
 
 <hr>
@@ -56,15 +51,12 @@ else {
 
 if(isset($_POST['submit']))
 {
-echo "Ergebnis der Suche ";
-
-echo "Ergebnis der Suche der letzten 6 Jahre";
 	$erg = get_brevet($_POST['nachname'],$_POST['vorname']);
 
 	$x = count($erg);
 	$i = 0;
 
-echo "<table>";
+echo "<table><caption>Ergebnis der Suche der letzten 6 Jahre</caption><tr><th scope=\"col\">Vorname</th><th scope=\"col\">Nachname</th><th scope=\"col\">Pruefungsnummer</th><th scope=\"col\">Ausbilder</th></tr>";
 	while($i<$x)
 	{
 		echo "<tr><td>".$erg[$i]."</td><td>".$erg[$i+1]."</td><td>".$erg[$i+2]."</td><td>".$erg[$i+3]."</td><td>".$erg[$i+4]."</td><tr>";

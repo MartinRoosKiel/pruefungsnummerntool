@@ -13,7 +13,7 @@ if ( !logged_in() ) {
 
 if ( logged_in() ) 
 {include_once('header.php'); 
-}
+
 
 if(isset($_POST['eintragen']))
 {
@@ -66,24 +66,22 @@ echo '<p><input  type="submit" name="eintragen" value="Speichern"></p>';
 }
 else {
 	echo 'Im Demomodus sind keine Eintragungen möglich.';
-} ?>
+} 
 		
-</fieldset>
-</form>
-<hr>
+echo '</fieldset>';
+echo '</form>';
+echo '<hr>';
+echo '<table>';
+echo 	'<caption>vorhandene Kurse</caption>';
+echo '<tr><th scope="col">Nummer</th><th scope="col">Beginn</th><th scope="col">Ende</th><th scope="col">LV / OV</th><th scope="col">Kursbeschreibung</th></tr>';
 
-
-
-
-			<table>
-			<caption>vorhandene Kurse</caption>
-			<tr><th scope="col">Nummer</th><th scope="col">Beginn</th><th scope="col">Ende</th><th scope="col">LV / OV</th><th scope="col">Kursbeschreibung</th></tr>
-			<?php
 				$erg = kurs_daten();
 				$kursListe = listeKurse($erg);
 				echo htmlspecialchars_decode($kursListe);
 				
-			 ?>
-			</table>
+			 
+echo'</table>';
 		
+}
 
+?>

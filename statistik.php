@@ -95,9 +95,11 @@ else {
 if(isset($_POST['submit']))
 {
 	
+	$jahr = htmlspecialchars($_POST['jahr']);
 	
-echo "<table><caption>Statistik f&uuml;r das Jahr ".$_POST['jahr']." </caption><tr><th scope=\"col\">Abnahmen pro</th><td width=30></td><th scope =\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
-	$erg = get_pruefungen($_POST['jahr']);
+	
+echo "<table><caption>Statistik f&uuml;r das Jahr ".$jahr." </caption><tr><th scope=\"col\">Abnahmen pro</th><td width=30></td><th scope =\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
+	$erg = get_pruefungen($jahr);
 
 	$x = count($erg);
 	$i = 0;
@@ -112,7 +114,7 @@ echo "<table><caption>Kurs</caption>";
 echo "</table> ".$tdetd."</td><td valign=\"top\">";
 
 
-	$erg = get_statistik($_POST['jahr']);
+	$erg = get_statistik($jahr);
 
 	$x = count($erg);
 	$i = 0;
@@ -128,10 +130,11 @@ echo "</table>".$tdetre."</table>";
 }
 if(isset($_POST['go']))
 {
+$jahr = htmlspecialchars($_POST['jahr']);
+$lvov = htmlspecialchars($_POST['lvov']);
 
-
-echo "<table><caption>Statistik f&uuml;r das Jahr ".$_POST['jahr']." und den LV / OV ".$_POST['lvov']."</caption><tr><th scope=\"col\">Abnahmen pro</th><td width=30></td><th scope=\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
-	$erg = get_pruefungen_lvov($_POST['jahr'],$_POST['lvov']);
+echo "<table><caption>Statistik f&uuml;r das Jahr ".$jahr." und den LV / OV ".$lvov."</caption><tr><th scope=\"col\">Abnahmen pro</th><td width=30></td><th scope=\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
+	$erg = get_pruefungen_lvov($jahr,htmlspecialchars($lvov));
 
 	$x = count($erg);
 	$i = 0;
@@ -146,18 +149,18 @@ echo "<table> <caption>Kurs</caption>";
 echo "</table> </td><td></td><td valign=\"top\">";
 
 
-	$erg = get_statistik_LVOV($_POST['jahr'],$_POST['lvov']);
+	$erg = get_statistik_LVOV($jahr,$lvov);
 
 	$x = count($erg);
 	$i = 0;
 echo "<table><caption>Ausbildungslevel</caption>";
 	while($i<$x)
 	{
-		echo $trtd.$erg[$i]."</td><td>".$erg[$i+1]."</td><tr>";
+		echo $trtd.$erg[$i].$tdetd.$erg[$i+1].$tdetre;
 		$i = $i+2;
 
 	}
-echo "</table></td></tr></table>";
+echo "</table>".$tdetre."</table>";
 
 }
 

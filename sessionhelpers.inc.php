@@ -173,7 +173,7 @@ function get_statistik_bySQL($sql)
 		
 	}
 
-	return = array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
+	return  array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
 }
 	
 /**

@@ -11,8 +11,8 @@ include('connect.inc.php');
  define("AUSBILDER","Ausbilder");
  define("DATUM","Datum");
  define("SQLSELECTJAHR","SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%");
- define("ungAb","Ung&uuml;ltige Abfrage:");
- define("ungAbsql"," sql:");
+ define("UNGAB","Ung&uuml;ltige Abfrage:");
+ define("UNGABSQL"," sql:");
  
 function connect () {
    
@@ -288,7 +288,7 @@ function next_number($kurs)
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);	
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);	
 	}
 	$row = mysqli_fetch_row($db_erg);
 	$rV = $row[0]+1;
@@ -306,7 +306,7 @@ function kurs_daten()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	return $db_erg;
 }
@@ -322,7 +322,7 @@ function get_ausbilder()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	return $db_erg;
 }
@@ -338,7 +338,7 @@ function jahreszahlen()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	return $db_erg;
 }
@@ -354,7 +354,7 @@ function lvov()
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
 	{
-		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	return $db_erg;
 }
@@ -372,7 +372,7 @@ function get_user_level($userID)
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if ( ! $db_erg )
 	{
-  		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	$zeile = mysqli_fetch_row($db_erg);
 	$rv = $zeile[0];
@@ -389,7 +389,7 @@ function user_data($userID)
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if ( ! $db_erg )
 	{
-  		die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	$zeile = mysqli_fetch_row($db_erg);
 	$rv[0] = $zeile[0];
@@ -525,7 +525,7 @@ function delete_user ( $name,$level ) {
 	$sql = $sql = "DELETE from `users` WHERE `UserName` = '$name' AND `UserLevel` = '$level'";
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if (!$db_erg) {
-   die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+   die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 }
 else
 {return 'Nutzer entfernt!';}
@@ -553,7 +553,7 @@ function insert_user ( $name,$pass,$email,$level ) {
 	$sql = $sql = "INSERT INTO `users`(`UserName`,`UserPass`,`UserMail`,`UserLevel`)VALUES ('$name','".md5($pass)."','$email','$level')";
 	$db_erg = mysqli_query(DBi::$con, $sql );
 	if (!$db_erg) {
-   die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+   die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 }
 else
 {return 'Neuer Nutzer eingetragen!';}
@@ -581,7 +581,7 @@ function check_user ( $name, $pass ) {
 
     $sql = 'SELECT UserId FROM users WHERE UserName = \'' . $name . '\' AND UserPass=\'' . md5($pass) . '\'';
     if ( !$result = mysqli_query(DBi::$con,$sql) ) {
-        die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+        die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
     }
     if ( mysqli_num_rows($result) == 1 ) {
         $user = mysqli_fetch_assoc($result);
@@ -601,7 +601,7 @@ function login ( $userid )
     	$sql = 'UPDATE users SET UserSession = \'' . session_id() . '\' WHERE UserId = ' . ((int)$userid);
     	if ( !mysqli_query(DBi::$con,$sql) ) 
 	{
-        	die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+        	die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
   	}
 }
 
@@ -612,7 +612,7 @@ function login ( $userid )
 function logged_in () {
     $sql = 'SELECT UserId FROM users WHERE UserSession = \'' . session_id() . '\'';
     if ( !$result = mysqli_query(DBi::$con,$sql) ) {
-        die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+        die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
     }
     return (mysqli_num_rows($result) == 1);
 }
@@ -624,7 +624,7 @@ function logged_in () {
 function logout () {
     $sql = 'UPDATE users SET UserSession = \'\' WHERE UserSession = \'' . session_id() . '\'';
     if ( mysqli_query(DBi::$con,$sql) ) {
-        die(ungAb.mysqli_error(DBi::$con).ungAbsql.$sql);
+        die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
     }
 }
 

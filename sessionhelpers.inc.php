@@ -491,7 +491,7 @@ function ausbilderSelector($liste)
 function change_userdata($name,$email,$userID)
 {
 	$sql = 'UPDATE users SET UserName = \''.$name.'\',UserMail =\''.$email.'\' Where UserID = \''.$userID.'\'';
-	$db_erg = mysqli_query(DBi::$con, $sql );
+	mysqli_query(DBi::$con, $sql );
 	
 	
 }
@@ -504,7 +504,7 @@ function change_userdata($name,$email,$userID)
 function change_pass($pass,$userID)
 {
 	$sql = 'UPDATE users SET UserPass = \''.md5($pass).'\' Where UserID = \''.$userID.'\'';
-	$db_erg = mysqli_query(DBi::$con, $sql );
+	mysqli_query(DBi::$con, $sql );
 	
 	
 }

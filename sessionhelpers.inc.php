@@ -50,7 +50,6 @@ function get_suche($nachname,$vorname)
 */
 function get_brevet($nachname,$vorname)
 { 
-	//$rV = array(FNAME,NAME,PNUMBER,DATUM, AUSBILDER);
 	$rV = [];
 	$sql = "Select Vorname, Nachname,  Nummer, Datum, Ausbilder from ( (Select pr.Vorname as Vorname, pr.Name as Nachname, ks.Ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse ks on pr.kurs = ks.id join users us on us.UserId = pr.AusbilderId) union (Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userId = wh.AusbilderId)) as daten where Datum = (Select max(datum) from ((Select ks.Ende as Datum from pruefung pr join kurse ks on pr.kurs = ks.id where pr.Vorname LIKE '%".$vorname."%' and pr.Name LIKE '%".$nachname."%' ) Union ( Select wh.Datum as Datum from wiederholung wh where wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%' )) as datum ) AND daten.Vorname LIKE '%".$vorname."%' and daten.Nachname LIKE '%".$nachname."%'  and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year)))";
 	$erg = mysqli_query(DBi::$con,$sql);
@@ -291,8 +290,7 @@ function next_number($kurs)
 		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);	
 	}
 	$row = mysqli_fetch_row($db_erg);
-	$rV = $row[0]+1;
-	return $rV;
+	return $row[0]+1;
 }
 
 /**
@@ -375,8 +373,7 @@ function get_user_level($userID)
   		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
 	$zeile = mysqli_fetch_row($db_erg);
-	$rv = $zeile[0];
-  	return $rv;
+  	return  $zeile[0];
 }
 
 /**
@@ -421,10 +418,13 @@ function eintragen_kurs($nummer, $begin, $ende, $kommentar, $verband)
 
 function listeKurse($liste)
 {
+	$trtd ="<tr><td>";
+	$tdetd ="</td><td>";
+	$tdetre ="</td></tr>";
 	$rString ="";
 	while($row = mysqli_fetch_array($liste))
 				{
-					$rString .=  "<tr><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[5]."</td><td>".$row[4]."</td></tr>";
+					$rString .=  $trtd.$row[1].$tdetd.$row[2].$tdetd.$row[3].$tdetd.$row[5].$tdetd.$row[4].$tdetre;
 				}
 	return $rString;
 }

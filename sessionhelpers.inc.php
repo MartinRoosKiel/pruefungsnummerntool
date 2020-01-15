@@ -10,6 +10,7 @@ include('connect.inc.php');
  define("PNUMBER","Pruefungsnummer");
  define("AUSBILDER","Ausbilder");
  define("DATUM","Datum");
+ define("SQLSELECTJAHR","SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%");
  
 function connect () {
    
@@ -97,7 +98,7 @@ function get_users()
 function get_statistik_LVOV($jahr, $lvov)
 { 
 
-	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%' AND `Verband` = ".$lvov;
+	$sql = SQLSELECTJAHR.$jahr."%' AND `Verband` = ".$lvov;
 	return get_statistik_bySQL($sql);
 }
 
@@ -108,7 +109,7 @@ function get_statistik_LVOV($jahr, $lvov)
 function get_statistik($jahr)
 { 
 
-	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%';";
+	$sql = SQLSELECTJAHR.$jahr."%';";
 	return get_statistik_bySQL($sql);
 
 }
@@ -129,48 +130,48 @@ function get_statistik_bySQL($sql)
 
 	while($row = mysqli_fetch_array($erg))
 	{
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-B%' ";
+		$sqlTemplate = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE ";
+		
+		$sql2 = $sqlTemplate."'%-B%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$bronze = $bronze + mysqli_num_rows($erg2);
 
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-S%' ";
+		$sql2 = $sqlTemplate."'%-S%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$silber = $silber + mysqli_num_rows($erg2);
 
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-G%' ";
+		$sql2 = $sqlTemplate."'%-G%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$gold = $gold + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-J%' ";
+		$sql2 = $sqlTemplate."'%-J%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$junior = $junior + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-WR%' ";
+		$sql2 = $sqlTemplate."'%-WR%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$retter = $retter + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-WL%' ";
+		$sql2 = $sqlTemplate."'%-WL%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$leiter = $leiter + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BS%' ";
+		$sql2 = $sqlTemplate."'%-BS%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$bs = $bs + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-BB%' ";
+		$sql2 = $sqlTemplate."'%-BB%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$bb = $bb + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-asr%' ";
+		$sql2 = $sqlTemplate."'%-asr%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$asr = $asr + mysqli_num_rows($erg2);
 		
-		$sql2 = "SELECT id from `pruefung` WHERE `Kurs`= $row[0] and `Nummer` LIKE '%-mw%' ";
+		$sql2 = $sqlTemplate."'%-mw%' ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$multiwr = $multiwr + mysqli_num_rows($erg2);
-		
-		
-		
+	
 	}
 
 	return  array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
@@ -184,7 +185,7 @@ function get_statistik_bySQL($sql)
 function get_pruefungen_lvov($jahr,$lvov)
 { 
 
-	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%' AND `Verband` = ".$lvov;
+	$sql = SQLSELECTJAHR.$jahr."%' AND `Verband` = ".$lvov;
 	$erg = mysqli_query(DBi::$con,$sql);
 	$rV = array("Kurs-Bezeichnung","Abnahmen");
 
@@ -208,7 +209,7 @@ function get_pruefungen_lvov($jahr,$lvov)
 function get_pruefungen($jahr)
 { 
 
-	$sql = "SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%".$jahr."%';";
+	$sql = SQLSELECTJAHR.$jahr."%';";
 	$erg = mysqli_query(DBi::$con,$sql);
 	$rV = array("Kurs-Bezeichnung","Abnahmen");
 

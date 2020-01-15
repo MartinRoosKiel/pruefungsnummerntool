@@ -31,7 +31,7 @@ class DBi{
 */
 function get_suche($nachname,$vorname)
 { 
-	$rV = array(FNAME,NAME,PNUMBER,AUSBIDLER);
+	$rV = array(FNAME,NAME,PNUMBER,AUSBILDER);
 	$erg = DBi::$con->prepare("SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE :vorname AND pruefung.Name LIKE :nachname");
 	$erg->execute(array('vorname' => concat("%",$vorname,"%"), 'nachname' => concat("%",$nachname,"%")));
 	while($row = mysqli_fetch_array($erg))
@@ -48,7 +48,8 @@ function get_suche($nachname,$vorname)
 */
 function get_brevet($nachname,$vorname)
 { 
-	$rV = array(FNAME,NAME,PNUMBER,DATUM, AUSBILDER);
+	//$rV = array(FNAME,NAME,PNUMBER,DATUM, AUSBILDER);
+	$rV = [];
 	$sql = "Select Vorname, Nachname,  Nummer, Datum, Ausbilder from ( (Select pr.Vorname as Vorname, pr.Name as Nachname, ks.Ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse ks on pr.kurs = ks.id join users us on us.UserId = pr.AusbilderId) union (Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userId = wh.AusbilderId)) as daten where Datum = (Select max(datum) from ((Select ks.Ende as Datum from pruefung pr join kurse ks on pr.kurs = ks.id where pr.Vorname LIKE '%".$vorname."%' and pr.Name LIKE '%".$nachname."%' ) Union ( Select wh.Datum as Datum from wiederholung wh where wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%' )) as datum ) AND daten.Vorname LIKE '%".$vorname."%' and daten.Nachname LIKE '%".$nachname."%'  and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year)))";
 	$erg = mysqli_query(DBi::$con,$sql);
 	while($row = mysqli_fetch_array($erg))

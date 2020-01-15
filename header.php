@@ -17,11 +17,14 @@ a.menu:active  { color:#E60000; background-color:#FFD633; }
 <br><br>
 <div style="text-align:center; margin-left: auto; margin-right: auto;">
 <form><?php
-echo '<a class="menu" href="index.php">Willkommen '.$_SESSION['name'].'</a>';
+if(isset($_SESSION['name']))
+{
+	echo '<a class="menu" href="index.php">Willkommen '.$_SESSION['name'].'</a>';
+}
 echo '<a class="menu" href="index.php">Startseite</a>';
 echo '<a class="menu" href="config.php">Administration</a>'; 
 echo '<a class="menu" href="statistik.php">Statistik</a>';
-if($_SESSION['usrlevel'] != 1) {	
+if(isset($_SESSION['usrlevel']) && $_SESSION['usrlevel'] != 1) {	
 	echo '<a class="menu" href="kurse.php">Kurse</a>';
 	echo '<a class="menu" href="pruefung.php">Pr&uuml;fung</a>';
 	echo '<a class="menu" href="wiederholung.php">Wiederholungen</a>';

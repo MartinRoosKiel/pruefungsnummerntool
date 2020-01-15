@@ -16,9 +16,9 @@ window.setTimeout('window.location = "index.php"',1000);
 </script>
 END;
 	logout();
+	session_destroy();
 	session_unset();   // Remove the $_SESSION variable information.
 	session_id(null); 
-    header("Location:index.php");
 	exit;
 	
 	

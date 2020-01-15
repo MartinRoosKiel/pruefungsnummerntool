@@ -421,6 +421,7 @@ function listeKurse($liste)
 	$trtd ="<tr><td>";
 	$tdetd ="</td><td>";
 	$tdetre ="</td></tr>";
+
 	$rString ="";
 	while($row = mysqli_fetch_array($liste))
 				{
@@ -623,7 +624,7 @@ function logged_in () {
  */
 function logout () {
     $sql = 'UPDATE users SET UserSession = \'\' WHERE UserSession = \'' . session_id() . '\'';
-    if ( mysqli_query(DBi::$con,$sql) ) {
+    if (!mysqli_query(DBi::$con,$sql) ) {
         die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
     }
 }

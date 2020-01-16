@@ -46,10 +46,6 @@ if(isset($_POST['nachname'])&isset($_POST['vorname'])&isset($_POST['kurs'])&isse
 <fieldset>
 <legend>neue Pr&uuml;fung</legend>
 <p>
-	<label>	Kursnummer</label>
-	<input name="nummer" type="text" size="20">
-</p>
-<p>
 	<label for="nachname">Name </label>
 	<input name="nachname" type="text" value ="">
 </p>

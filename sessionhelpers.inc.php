@@ -193,7 +193,7 @@ function get_pruefungen_lvov($jahr,$lvov)
 
 	while($row = mysqli_fetch_array($erg))
 	{
-		$sql2 = "SELECT MAX(id) from `pruefung` WHERE `Kurs`= $row[0] ";
+		$sql2 = "SELECT count(*) from `pruefung` WHERE `Kurs`= $row[0] ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$erg2 = mysqli_fetch_row($erg2);
 		if($erg2[0]=='')
@@ -217,7 +217,7 @@ function get_pruefungen($jahr)
 
 	while($row = mysqli_fetch_array($erg))
 	{
-		$sql2 = "SELECT MAX(id) from `pruefung` WHERE `Kurs`= $row[0] ";
+		$sql2 = "SELECT count(*) from `pruefung` WHERE `Kurs`= $row[0] ";
 		$erg2 = mysqli_query(DBi::$con,$sql2);
 		$erg2 = mysqli_fetch_row($erg2);
 		if($erg2[0]=='')

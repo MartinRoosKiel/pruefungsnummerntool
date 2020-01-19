@@ -35,17 +35,17 @@ if(isset($errorMessage)) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="images/pic_header_order_default.png">
 <br><br>
-<h1>Pr&uuml;fungsnummernvergabe</h1> </div>
 <form method="post" action="login.php">
-<table border="0" cellpadding="0" cellspacing="4">
-<tr><td>
-<label>Benutzername:</label> </td><td> <input name="username" type="text">
-</td></tr><tr>
-<td><label>Passwort:</label> </td><td> <input name="userpass" type="password" id="userpass">
-</td></tr><tr><td>
+<fieldset>
+<legend>Pr&uuml;fungsnummernvergabe</legend> 
+<p>
+<label for=\"username\">Benutzername:</label> <input name="username" type="text">
+</p><p><label for=\"userpass\">Passwort:</label> <input name="userpass" type="password" id="userpass">
+</p>
+<p>
 <input name="login" type="submit" id="login" value="Einloggen">
-</td></tr>
-</table>
+<p>
+</fieldset>
 </form>
 END;
 }

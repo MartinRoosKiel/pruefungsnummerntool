@@ -10,7 +10,6 @@ include('connect.inc.php');
  define("PNUMBER","Pruefungsnummer");
  define("AUSBILDER","Ausbilder");
  define("DATUM","Datum");
- define("SQLSELECTJAHR","SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE '%");
  define("UNGAB","Ung&uuml;ltige Abfrage:");
  define("UNGABSQL"," sql:");
  
@@ -18,7 +17,7 @@ function connect () {
    
     DBi::$con = new mysqli('localhost', USERNAME, PASSWORD, TABLE);
 	if(DBi::$con->connect_errno){ 
-		die("Verbindung fehlgeschlagen: " . DBi::$con->connect_error);
+		die("Verbindung fehlgeschlagen");
 		}
 }
 
@@ -26,22 +25,7 @@ class DBi{
 	public static $con;
 }
 
-/**
-* @param string $vorname
-* @param string $nachname
-* @return array
-*/
-function get_suche($nachname,$vorname)
-{ 
-	$rV = array(FNAME,NAME,PNUMBER,AUSBILDER);
-	$erg = DBi::$con->prepare("SELECT pruefung.Vorname,pruefung.Name,pruefung.Nummer ,users.Name from `pruefung` Inner join users ON pruefung.AusbilderId = users.UserId WHERE pruefung.Vorname LIKE :vorname AND pruefung.Name LIKE :nachname");
-	$erg->execute(array('vorname' => concat("%",$vorname,"%"), 'nachname' => concat("%",$nachname,"%")));
-	while($row = mysqli_fetch_array($erg))
-	{
-			array_push($rV,$row[0],$row[1],$row[2],$row[3]);	
-	}
-	return $rV;
-}
+ 
 
 /**
 * @param string $vorname
@@ -50,30 +34,20 @@ function get_suche($nachname,$vorname)
 */
 function get_brevet($nachname,$vorname)
 { 
+    $wildVorname = "%".$vorname."%";
+    $wildNachname ="%".$nachname."%";
+    
 	$rV = [];
-	$sql = "Select Vorname, Nachname,  Nummer, Datum, Ausbilder from ( (Select pr.Vorname as Vorname, pr.Name as Nachname, ks.Ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse ks on pr.kurs = ks.id join users us on us.UserId = pr.AusbilderId) union (Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userId = wh.AusbilderId)) as daten where Datum = (Select max(datum) from ((Select ks.Ende as Datum from pruefung pr join kurse ks on pr.kurs = ks.id where pr.Vorname LIKE '%".$vorname."%' and pr.Name LIKE '%".$nachname."%' ) Union ( Select wh.Datum as Datum from wiederholung wh where wh.Vorname LIKE '%".$vorname."%' and wh.Nachname LIKE '%".$nachname."%' )) as datum ) AND daten.Vorname LIKE '%".$vorname."%' and daten.Nachname LIKE '%".$nachname."%'  and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year)))";
-	$erg = mysqli_query(DBi::$con,$sql);
+        
+	$stm = DBi::$con->prepare("Select Vorname, Nachname,  Nummer, Datum, Ausbilder from ( (Select pr.Vorname as Vorname, pr.Name as Nachname, ks.Ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse ks on pr.kurs = ks.id join users us on us.UserId = pr.AusbilderId) union (Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userId = wh.AusbilderId)) as daten where Datum = (Select max(datum) from ((Select ks.Ende as Datum from pruefung pr join kurse ks on pr.kurs = ks.id where pr.Vorname LIKE ? and pr.Name LIKE ? ) Union ( Select wh.Datum as Datum from wiederholung wh where wh.Vorname LIKE ? and wh.Nachname LIKE ? )) as datum ) AND daten.Vorname LIKE ? and daten.Nachname LIKE ?  and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year)))");
+	$stm->bind_param("ssssss",$wildVorname,$wildNachname,$wildVorname,$wildNachname,$wildVorname,$wildNachname);
+        $stm->execute();
+        $erg = $stm->get_result();
 	while($row = mysqli_fetch_array($erg))
 	{
 			array_push($rV,$row[0],$row[1],$row[2],$row[3],$row[4]);	
 	}
-	return $rV;
-}
-
-/**
-* @param string $vorname
-* @param string $nachname
-* @return array
-*/
-function get_wiederholung($nachname,$vorname)
-{ 
-	$rV = array(FNAME,NAME,DATUM, AUSBILDER);
-	$sql = "SELECT wiederholung.Vorname,wiederholung.Nachname,MAX(wiederholung.Datum),us.Name from `wiederholung` Inner join users us ON wiederholung.AusbilderId = users.UserId WHERE wiederholung.Vorname LIKE '%".$vorname."%' AND wiederholung.Nachname LIKE '%".$nachname."%' GROUP BY Vorname, Nachname";
-	$erg = mysqli_query(DBi::$con,$sql);
-	while($row = mysqli_fetch_array($erg))
-	{
-			array_push($rV,$row[0],$row[1],$row[2],$row[3]);	
-	}
+        $stm->close();  
 	return $rV;
 }
 
@@ -83,12 +57,14 @@ function get_wiederholung($nachname,$vorname)
 function get_users()
 { 
 	$rV = array();
-	$sql = "SELECT UserName,UserLevel FROM `users` ORDER BY UserName";
-	$erg = mysqli_query(DBi::$con,$sql);
+	$stm = DBi::$con->prepare("SELECT UserName,UserLevel FROM `users` ORDER BY UserName");
+        $stm->execute();
+	$erg =$stm->get_result();
 	while($row = mysqli_fetch_array($erg))
 	{
 			array_push($rV,$row[0],$row[1]);	
 	}
+        $stm->close(); 
 	return $rV;
 }
 
@@ -99,9 +75,11 @@ function get_users()
 */
 function get_statistik_LVOV($jahr, $lvov)
 { 
+    $wildJahr ="%".$jahr."%";
 
-	$sql = SQLSELECTJAHR.$jahr."%' AND `Verband` = ".$lvov;
-	return get_statistik_bySQL($sql);
+	$stm = DBi::$con->prepare("SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE ?  AND `Verband` = ?");
+        $stm->bind_param("ss",$wildJahr,$lvov);
+	return get_statistik_bySQL($stm);
 }
 
 /**
@@ -110,15 +88,19 @@ function get_statistik_LVOV($jahr, $lvov)
 */
 function get_statistik($jahr)
 { 
+    $wildJahr ="%".$jahr."%";
 
-	$sql = SQLSELECTJAHR.$jahr."%';";
-	return get_statistik_bySQL($sql);
+	$stm = DBi::$con->prepare("SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE ?");
+        $stm->bind_param("s",$wildJahr);
+	return get_statistik_bySQL($stm);
 
 }
 
-function get_statistik_bySQL($sql)
+function get_statistik_bySQL($stm)
 {
-		$erg = mysqli_query(DBi::$con,$sql);
+        $stm->execute();
+	$erg =$stm->get_result();
+        
 	$bronze = 0;
 	$silber = 0;
 	$gold = 0;
@@ -175,7 +157,7 @@ function get_statistik_bySQL($sql)
 		$multiwr = $multiwr + mysqli_num_rows($erg2);
 	
 	}
-
+$stm->close(); 
 	return  array("Bronze",$bronze,"Silber",$silber,"Gold",$gold,"Junioretter",$junior,"Wasserretter",$retter,"Wachleiter",$leiter,"Bootsf&uuml;hrer See", $bs,"Bootsf&uuml;rer Binnen",$bb, "Ausbilder Schwimmen und Rettungsschwimmen",$asr, "Multiplikator Wasserretter", $multiwr);
 }
 	
@@ -186,23 +168,12 @@ function get_statistik_bySQL($sql)
 */
 function get_pruefungen_lvov($jahr,$lvov)
 { 
+    $wildJahr = "%".$jahr."%";
 
-	$sql = SQLSELECTJAHR.$jahr."%' AND `Verband` = ".$lvov;
-	$erg = mysqli_query(DBi::$con,$sql);
-	$rV = array("Kurs-Bezeichnung","Abnahmen");
-
-	while($row = mysqli_fetch_array($erg))
-	{
-		$sql2 = "SELECT count(*) from `pruefung` WHERE `Kurs`= $row[0] ";
-		$erg2 = mysqli_query(DBi::$con,$sql2);
-		$erg2 = mysqli_fetch_row($erg2);
-		if($erg2[0]=='')
-		{
-			$erg2[0] = 0;
-		}
-		array_push($rV,$row[1],$erg2[0]);	
-	}
-	return $rV;
+	$stm = DBi::$con->prepare("SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE ? AND `Verband` = ?");
+        $stm->bind_param("ss",$wildJahr,$lvov);
+        
+	return get_pruefungen_body($stm);
 }
 /**
 * @param string $jahr
@@ -210,9 +181,18 @@ function get_pruefungen_lvov($jahr,$lvov)
 */
 function get_pruefungen($jahr)
 { 
+    $wildJahr = "%".$jahr."%";
 
-	$sql = SQLSELECTJAHR.$jahr."%';";
-	$erg = mysqli_query(DBi::$con,$sql);
+	$stm = DBi::$con->prepare("SELECT id,bemerkungen FROM `kurse` WHERE `ende` LIKE ?");
+	$stm->bind_param("s",$wildJahr);
+        
+        return get_pruefungen_body($stm);
+}
+
+function get_pruefungen_body($stm)
+{
+        $stm->execute();
+        $erg =$stm->get_result();
 	$rV = array("Kurs-Bezeichnung","Abnahmen");
 
 	while($row = mysqli_fetch_array($erg))
@@ -226,7 +206,9 @@ function get_pruefungen($jahr)
 		}
 		array_push($rV,$row[1],$erg2[0]);	
 	}
+        $stm->close(); 
 	return $rV;
+    
 }
 
 /**
@@ -240,8 +222,11 @@ function eintragen_pruefung($name,$vorname,$kurs,$level,$ausbilderId)
 {
 
 	$lfd = next_number($kurs);
- 	$sql = "SELECT `laufende_nummer`,`start`,`Verband` FROM `kurse` WHERE id= $kurs";
-	$erg = mysqli_query(DBi::$con,$sql);
+ 	$stmSelect = DBi::$con->prepare("SELECT `laufende_nummer`,`start`,`Verband` FROM `kurse` WHERE id= ?");
+        $stmSelect->bind_param("i",$kurs);
+        $stmSelect->execute();
+        
+	$erg = $stmSelect->get_result();
 	$zeile = mysqli_fetch_row($erg);
 	$kNummer = $zeile[0];
 	if($kNummer==0)
@@ -253,11 +238,13 @@ function eintragen_pruefung($name,$vorname,$kurs,$level,$ausbilderId)
 		$kursNummer = str_pad($kNummer, 2 ,'0', STR_PAD_LEFT);
 	}
 	$rv = $zeile[2]."/".$kursNummer."/".str_pad($lfd, 2 ,'0', STR_PAD_LEFT)."/".substr($zeile[1],2,2)."-".$level;
+        $stmSelect->close(); 
 
-
-$sql = "INSERT INTO `pruefung` (`id`,`Vorname`,`Name`,`Kurs`,`Nummer`,`AusbilderId`) VALUES ('".$lfd."','".$vorname."','".$name."','".$kurs."', '".$rv."', '".$ausbilderId."');";
-mysqli_query(DBi::$con,$sql);
-
+        $stmInsert = DBi::$con->prepare("INSERT INTO `pruefung` (`id`,`Vorname`,`Name`,`Kurs`,`Nummer`,`AusbilderId`) VALUES (?,?,?,?,?,?)");
+        $stmInsert->bind_param("issisi",$lfd,$vorname,$name,$kurs,$rv,$ausbilderId);
+        $stmInsert->execute();
+        $stmInsert->close();
+        
 	return $rv;
 	
 }
@@ -270,8 +257,9 @@ mysqli_query(DBi::$con,$sql);
 function eintragen_wiederholung($name,$vorname,$datum,$ausbilderId)
 {
 
-$sql = "INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES ('".$vorname."','".$name."', '".$datum."', '".$ausbilderId."');";
-mysqli_query(DBi::$con,$sql);
+$stm = Dbi::$con-prepare("INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES (?,?,?,?)");
+        $stm->bind_param("sssi",$vorname,$name,$datum,$ausbilderId);
+        $stm->execute();
 	
 }
 

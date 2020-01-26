@@ -7,14 +7,8 @@ if ( !logged_in() ) {
     echo 'Sie sind nicht eingeloggt.';
     echo '<p><a href="login.php">Anmelden</a></p>';
 }
-
-
-
-
 if ( logged_in() ) 
 {include_once('header.php'); 
-
-
 if(isset($_POST['eintragen']))
 {
 	if(logged_in()){
@@ -26,46 +20,45 @@ if(isset($_POST['eintragen']))
 	}
 }
 ob_end_flush();
-?>
 
 
-<form method="post" action="kurse.php">
-<fieldset>
-<legend>neuer Kurs</legend>
-<p>
-	<label for="nummer">	Kursnummer</label>
-	<input name="nummer" type="text" size="20">
-	</p>
-<p>
-		<label for="begin">Startdatum
+echo '<form method="post" action="kurse.php">';
+echo '<fieldset>';
+echo '<legend>neuer Kurs</legend>';
+echo '<p>';
+echo '	<label for="nummer">	Kursnummer</label>';
+echo '	<input name="nummer" type="text" size="20">';
+echo '	</p>';
+echo '<p>';
+echo '		<label for="begin">Startdatum';
 	
-		<input name="begin" type="text" size="20">
-		</label>
-	</p>
-<p>
-		<label for="ende">Enddatum
+echo '		<input name="begin" type="text" size="20">';
+echo '		</label>';
+echo '	</p>';
+echo '<p>';
+echo '		<label for="ende">Enddatum';
 	
-		<input name="ende" type="text" size="20">
-		</label>
-	</p>
-	<p>
-		<label for="verband">LV/OV Nummer
+echo '		<input name="ende" type="text" size="20">';
+echo '		</label>';
+echo '	</p>';
+echo '	<p>';
+echo '		<label for="verband">LV/OV Nummer';
 	
-		<input name="verband" type="text" size="20">
-		</label>
-	</p>
-	<p>
-		<label for="kommentar">Kursbeschreibung
+echo '		<input name="verband" type="text" size="20">';
+echo '		</label>';
+echo '	</p>';
+echo '	<p>';
+echo '		<label for="kommentar">Kursbeschreibung';
 	
-		<input name="kommentar" type="text" size="20">
-		</label>
-	</p>
-	<?php if($_SESSION['usrlevel'] >= 2) {
+echo '		<input name="kommentar" type="text" size="20">';
+echo '		</label>';
+echo '	</p>';
+	 if($_SESSION['usrlevel'] >= 2) {
 		
 echo '<p><input  type="submit" name="eintragen" value="Speichern"></p>'; 
 }
 else {
-	echo 'Im Demomodus sind keine Eintragungen möglich.';
+	echo 'Im Demomodus sind keine Eintragungen mï¿½glich.';
 } 
 		
 echo '</fieldset>';

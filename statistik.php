@@ -14,80 +14,72 @@ if ( logged_in() ) {
     	include_once('header.php'); 
 }
 
+echo '<br>';
+echo '<hr>';
+echo 'Bitte w&auml;hlen sie f&uuml;r eine Jahresstatistik das entsprechende Jahr und dr&uuml;cken sie "Abfragen"!';
 
-?>
-
-<br>
-<hr>
-Bitte w&auml;hlen sie f&uuml;r eine Jahresstatistik das entsprechende Jahr und dr&uuml;cken sie "Abfragen"!
-
-
-
-<form  action="statistik.php" method="post">
-<fieldset>
-<legend>Jahresstatistik gesamt</legend>
-<p><label for="jahr">Kursjahr </label> <select name = "jahr">
+echo '<form  action="statistik.php" method="post">';
+echo '<fieldset>';
+echo '<legend>Jahresstatistik gesamt</legend>';
+echo '<p><label for="jahr">Kursjahr </label> <select name = "jahr">';
 	
-				<?php
 				$erg = jahreszahlen();
 				echo kursjahrSelector($erg);
-			 ?>
-	<select>
-</p>	
+
+echo '	<select>';
+echo '</p>	';
 
 		
 
-		<?php if($_SESSION['usrlevel'] >= 1) {
+ if($_SESSION['usrlevel'] >= 1) {
 echo '<p><input  type="submit" name="submit" value="Abfragen"></p>';
 }
 else {
-	echo 'Im Demomodus sind keine Abfragen möglich.';
-} ?>
+	echo 'Im Demomodus sind keine Abfragen mï¿½glich.';
+} 
 	
-</fieldset>
-</form>
+echo '</fieldset>';
+echo '</form>';
 
-<hr>
-Bitte w&auml;hlen sie f&uuml;r eine Jahresstatistik das entsprechende Jahr und den OV / LV  und dr&uuml;cken sie "Abfragen"!
+echo '<hr>';
+echo 'Bitte w&auml;hlen sie f&uuml;r eine Jahresstatistik das entsprechende Jahr und den OV / LV  und dr&uuml;cken sie "Abfragen"!';
 
 
 
-<form  action="statistik.php" method="post">
-<fieldset>
-<legend>Jahresstatistik f&uuml;r einen LV/OV</legend>
-<p><label for="jahr">Kursjahr </label> <select name = "jahr">
+echo '<form  action="statistik.php" method="post">';
+echo '<fieldset>';
+echo '<legend>Jahresstatistik f&uuml;r einen LV/OV</legend>';
+echo '<p><label for="jahr">Kursjahr </label> <select name = "jahr">';
 	
-				<?php
 				$erg = jahreszahlen();
 				echo kursjahrSelector($erg);
-			 ?>
-	</select>
-</p>	
-<p><label for="lvov">LV / OV </label> <select name = "lvov">
+			 
+echo '	</select>';
+echo '</p>	';
+echo '<p><label for="lvov">LV / OV </label> <select name = "lvov">';
 	
-				<?php
+				
 				$erg = lvov();
 				echo lvOvSelector($erg);
-			 ?>
-	</select>
-</p>	
+			
+echo '	</select>';
+echo '</p>	';
 
 		
-<?php if($_SESSION['usrlevel'] >= 1) {
+if($_SESSION['usrlevel'] >= 1) {
 echo '<p><input  type="submit" name="go" value="Abfragen"></p>';
 }
 else {
 	echo 'Im Demomodus sind keine Abfragen m&ouml;glich.';
-} ?>
+} 
 		
-	</fieldset>
-</form>
+echo '	</fieldset>';
+echo '</form>';
 
-<hr>
+echo '<hr>';
 
 
 
-<?php 
     $trtd = "<tr><td>";
 	$tdetd = "</td><td>";
 	$tdetre = "</td></tr>";

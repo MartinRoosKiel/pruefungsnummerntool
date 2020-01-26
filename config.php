@@ -97,7 +97,7 @@ echo '<input type="submit" name="deleteUser" value="Nutzer entfernen">';
 
 }
 if($usrl == 0) {
-	echo 'Im Demomodus sind keine Eintragungen möglich.';
+	echo 'Im Demomodus sind keine Eintragungen mï¿½glich.';
 }
 
 echo '</td></tr></table></form>';

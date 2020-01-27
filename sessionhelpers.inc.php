@@ -256,10 +256,16 @@ function eintragen_pruefung($name,$vorname,$kurs,$level,$ausbilderId)
  */
 function eintragen_wiederholung($name,$vorname,$datum,$ausbilderId)
 {
-
-$stm = Dbi::$con-prepare("INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES (?,?,?,?)");
+$sql= "INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES (?,?,?,?)";
+$stm = Dbi::$con-prepare($sql);
         $stm->bind_param("sssi",$vorname,$name,$datum,$ausbilderId);
         $stm->execute();
+        $erg = $setm->get_result();
+        if( !$erg)
+	{
+		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);	
+	}
+        $stm->close();
 	
 }
 
@@ -270,14 +276,17 @@ $stm = Dbi::$con-prepare("INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datu
  * @return int
  */
 function next_number($kurs)
-{
-	$sql = "SELECT MAX(id) FROM `pruefung` WHERE `Kurs`= $kurs;";
-	$db_erg = mysqli_query(DBi::$con,$sql);
-	if( !$db_erg)
+{$sql = "SELECT MAX(id) FROM `pruefung` WHERE `Kurs`= ?";
+	$stm = DBi::$con->prepare($sql);
+        $stm->bind_param("i", $kurs);
+        $stm->execute();
+        $erg = $stm->get_result();
+        $stm->close();
+	if( !$erg)
 	{
 		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);	
 	}
-	$row = mysqli_fetch_row($db_erg);
+	$row = mysqli_fetch_row($erg);
 	return $row[0]+1;
 }
 
@@ -286,24 +295,24 @@ function next_number($kurs)
  * @return string
  */
 function kurs_daten()
-{
-	$sql = "SELECT * FROM `kurse` ORDER BY `start` DESC, `laufende_nummer` DESC;";
-
-	$db_erg = mysqli_query(DBi::$con,$sql);
-	if( !$db_erg)
+{$sql = "SELECT * FROM `kurse` ORDER BY `start` DESC, `laufende_nummer` DESC";
+	$stm = DBi::$con->prepare($sql);
+        $stm->execute();
+	$erg = $stm->get_result();
+        
+        $stm->close();
+	if( !$erg)
 	{
 		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
-	return $db_erg;
+	return $erg;
 }
 /**
 * @param
 * @return string
 */
 function get_ausbilder()
-{
-
- $sql = "SELECT UserId,Name FROM `users` WHERE ASR not LIKE '' or ATR not LIKE '' ORDER BY `Name` ASC;"; 
+{ $sql = "SELECT UserId,Name FROM `users` WHERE ASR not LIKE '' or ATR not LIKE '' ORDER BY `Name` ASC;"; 
 
 	$db_erg = mysqli_query(DBi::$con,$sql);
 	if( !$db_erg)
@@ -318,15 +327,16 @@ function get_ausbilder()
  * @return string
  */
 function jahreszahlen()
-{
-	$sql = "SELECT DISTINCT SUBSTR(`ende`,1,4)  FROM `kurse` ORDER by `id` DESC;";
-
-	$db_erg = mysqli_query(DBi::$con,$sql);
-	if( !$db_erg)
+{$sql = "SELECT DISTINCT SUBSTR(`ende`,1,4)  FROM `kurse` ORDER by `id` DESC";
+	$stm = Dbi::$con->prepare($sql);
+        $stm->execute();
+	$erg = $stm->get_result();
+        $stm->close();
+	if( !$erg)
 	{
 		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
-	return $db_erg;
+	return $erg;
 }
 
 /**
@@ -336,13 +346,15 @@ function jahreszahlen()
 function lvov()
 {
 	$sql = "SELECT DISTINCT `Verband` FROM `kurse` ORDER by `id` ASC;";
-
-	$db_erg = mysqli_query(DBi::$con,$sql);
-	if( !$db_erg)
+$stm= DBi::$con->prepare($sql);
+$stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if( !$erg)
 	{
 		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
-	return $db_erg;
+	return $erg;
 }
 
 
@@ -355,12 +367,16 @@ function lvov()
 function get_user_level($userID)
 {
 	$sql = "SELECT `UserLevel` FROM `users` Where UserID =".$userID.";";
-	$db_erg = mysqli_query(DBi::$con, $sql );
-	if ( ! $db_erg )
+        $stm= DBi::$con->prepare($sql);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	$erg = mysqli_query(DBi::$con, $sql );
+	if ( ! $erg )
 	{
   		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
-	$zeile = mysqli_fetch_row($db_erg);
+	$zeile = mysqli_fetch_row($erg);
   	return  $zeile[0];
 }
 
@@ -371,12 +387,15 @@ function get_user_level($userID)
 function user_data($userID)
 {
 	$sql = "SELECT `UserName`, `UserMail`, `Name`,`ASR`,`ATR` FROM `users` Where UserID =".$userID.";";
-	$db_erg = mysqli_query(DBi::$con, $sql );
-	if ( ! $db_erg )
+	        $stm= DBi::$con->prepare($sql);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
 	{
   		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
 	}
-	$zeile = mysqli_fetch_row($db_erg);
+	$zeile = mysqli_fetch_row($erg);
 	$rv[0] = $zeile[0];
 	$rv[1] = $zeile[1];
 	$rv[2] = $zeile[2];
@@ -397,8 +416,11 @@ function user_data($userID)
 function eintragen_kurs($nummer, $begin, $ende, $kommentar, $verband)
 {
 	$sql = $sql = "INSERT INTO `kurse`(`laufende_nummer`,`start`,`ende`,`bemerkungen`,`Verband`)VALUES ('$nummer','$begin','$ende','$kommentar','$verband')";
-	$db_erg = mysqli_query(DBi::$con, $sql );
-	$zeile = mysqli_fetch_row($db_erg);
+	        $stm= DBi::$con->prepare($sql);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	$zeile = mysqli_fetch_row($erg);
 	
 	return $zeile[0];
 	
@@ -479,9 +501,16 @@ function ausbilderSelector($liste)
  */
 function change_userdata($name,$email,$userID)
 {
-	$sql = 'UPDATE users SET UserName = \''.$name.'\',UserMail =\''.$email.'\' Where UserID = \''.$userID.'\'';
-	mysqli_query(DBi::$con, $sql );
-	
+	$sql = "UPDATE users SET UserName = ?,UserMail = ? Where UserID = ?";
+                $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("ssi",$name,$email,$userID);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
+	{
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
+	}
 	
 }
 
@@ -492,30 +521,38 @@ function change_userdata($name,$email,$userID)
  */
 function change_pass($pass,$userID)
 {
-	$sql = 'UPDATE users SET UserPass = \''.md5($pass).'\' Where UserID = \''.$userID.'\'';
-	mysqli_query(DBi::$con, $sql );
+    $md5Pass = md5($pass);
+	$sql = "UPDATE users SET UserPass = ? Where UserID = ?";
+                $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("si",$md5Pass,$userID);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
+	{
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
+	}
 	
 	
 }
 
 /**
  * @param string $name
- * @param string $pass
- * @param string $email
  * @param string $level
  * @return boolean
  */
 function delete_user ( $name,$level ) {
-    // magic quotes anpassen
-    if ( get_magic_quotes_gpc() ) {
-        $name = stripslashes($name);
-		$level = stripslashes($level);
-    }
-	$sql = $sql = "DELETE from `users` WHERE `UserName` = '$name' AND `UserLevel` = '$level'";
-	$db_erg = mysqli_query(DBi::$con, $sql );
-	if (!$db_erg) {
-   die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
-}
+        
+        $sql = "DELETE from `users` WHERE `UserName` = ? AND `UserLevel` = ?";
+                $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("si",$name,$level);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
+	{
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
+	}
 else
 {return 'Nutzer entfernt!';}
    
@@ -529,22 +566,19 @@ else
  * @return boolean
  */
 function insert_user ( $name,$pass,$email,$level ) {
-    // magic quotes anpassen
-    if ( get_magic_quotes_gpc() ) {
-        $name = stripslashes($name);
-        $pass = stripslashes($pass);
-		$email = stripslashes($email);
-		$level = stripslashes($level);
-		$name = stripslashes($name);
-		$asr = stripslashes($asr);
-		$atr = stripslashes($atr);
-    }
-	$sql = $sql = "INSERT INTO `users`(`UserName`,`UserPass`,`UserMail`,`UserLevel`)VALUES ('$name','".md5($pass)."','$email','$level')";
-	$db_erg = mysqli_query(DBi::$con, $sql );
-	if (!$db_erg) {
-   die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
-}
-else
+    $md5Pass = md5($pass);
+	$sql = "INSERT INTO `users`(`UserName`,`UserPass`,`UserMail`,`UserLevel`)VALUES (?,?,?,?)";
+	
+   $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("sssi",$name,$md5Pass,$email,$level);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
+	{
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
+	}
+ else
 {return 'Neuer Nutzer eingetragen!';}
    
 }
@@ -555,26 +589,22 @@ else
  * @return boolean
  */
 function check_user ( $name, $pass ) {
-    // magic quotes anpassen
-    if ( get_magic_quotes_gpc() ) {
-        $name = stripslashes($name);
-        $pass = stripslashes($pass);
-    }
-    // escapen von \\, \x00, \n, \r, \, ', " und \x1a
-    $name = mysqli_real_escape_string(DBi::$con,$name);
-    // escapen von Backticks (`)
-    $name = preg_replace("/ \x60/", "/ \\\x60(", $name);
-    // escapen von % und _
-    $name = str_replace('%', '\%', $name);
-    $name = str_replace('_', '\_', $name);
 
-    $sql = 'SELECT UserId FROM users WHERE UserName = \'' . $name . '\' AND UserPass=\'' . md5($pass) . '\'';
-    if ( !$result = mysqli_query(DBi::$con,$sql) ) {
-        die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
-    }
-    if ( mysqli_num_rows($result) == 1 ) {
-        $user = mysqli_fetch_assoc($result);
-        return ( $user['UserId'] );
+        $md5Pass = md5($pass);
+	 $sql = "SELECT UserId FROM users WHERE UserName = ? AND UserPass=?";
+   
+   $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("ss",$name,$md5Pass);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+	if ( ! $erg )
+	{
+  		die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
+	}
+    if ( mysqli_num_rows($erg) == 1 ) {
+        $user = mysqli_fetch_assoc($erg);
+        return ( $user["UserId"] );
     } else {
         return ( false );
     }
@@ -587,11 +617,15 @@ function check_user ( $name, $pass ) {
  */
 function login ( $userid ) 
 {
-    	$sql = 'UPDATE users SET UserSession = \'' . session_id() . '\' WHERE UserId = ' . ((int)$userid);
-    	if ( !mysqli_query(DBi::$con,$sql) ) 
-	{
-        	die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
-  	}
+    $session = session_id();
+    	$sql = "UPDATE users SET UserSession = ? WHERE UserId = ?";
+        
+   
+   $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("si",$session,$userid);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
 }
 
 
@@ -599,11 +633,15 @@ function login ( $userid )
  * @return boolean
  */
 function logged_in () {
-    $sql = 'SELECT UserId FROM users WHERE UserSession = \'' . session_id() . '\'';
-    if ( !$result = mysqli_query(DBi::$con,$sql) ) {
-        die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
-    }
-    return (mysqli_num_rows($result) == 1);
+    $session = session_id();
+    $sql = "SELECT UserId FROM users WHERE UserSession = ?";
+    $stm = DBi::$con->prepare($sql);
+    
+                $stm->bind_param("s",$session);
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+    return (mysqli_num_rows($erg) == 1);
 }
 
 
@@ -611,8 +649,14 @@ function logged_in () {
  * @return void
  */
 function logout () {
-    $sql = 'UPDATE users SET UserSession = \'\' WHERE UserSession = \'' . session_id() . '\'';
-    if (!mysqli_query(DBi::$con,$sql) ) {
+    $sql = "UPDATE users SET UserSession = '' WHERE UserSession = ?";
+    
+     $stm= DBi::$con->prepare($sql);
+                $stm->bind_param("s",session_id());
+        $stm->execute();
+$erg = $stm->get_result();
+$stm->close();
+    if (!$erg ) {
         die(UNGAB.mysqli_error(DBi::$con).UNGABSQL.$sql);
     }
 }

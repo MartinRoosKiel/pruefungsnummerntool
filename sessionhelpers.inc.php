@@ -247,7 +247,7 @@ function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
 }
 
 /**
- * @param kurs 
+ * @param kurs
  * @return int
  */
 function next_number($kurs) {
@@ -265,7 +265,7 @@ function next_number($kurs) {
 }
 
 /**
- * @param 
+ * @param
  * @return string
  */
 function kurs_daten() {
@@ -296,7 +296,7 @@ function get_ausbilder() {
 }
 
 /**
- * @param 
+ * @param
  * @return string
  */
 function jahreszahlen() {
@@ -312,7 +312,7 @@ function jahreszahlen() {
 }
 
 /**
- * @param 
+ * @param
  * @return string
  */
 function lvov() {
@@ -577,16 +577,15 @@ function logged_in() {
  * @return void
  */
 function logout() {
+
+    $session = session_id();
+
     $sql = "UPDATE users SET UserSession = '' WHERE UserSession = ?";
 
     $stm = DBi::$con->prepare($sql);
-    $stm->bind_param("s", session_id());
+    $stm->bind_param("s", $session);
     $stm->execute();
-    $erg = $stm->get_result();
     $stm->close();
-    if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
-    }
 }
 
 connect();

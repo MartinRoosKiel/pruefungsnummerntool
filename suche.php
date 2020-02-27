@@ -56,7 +56,7 @@ if(isset($_POST['submit']))
 	$x = count($erg);
 	$i = 0;
 
-echo "<table><caption>Ergebnis der Suche der letzten 6 Jahre</caption><tr><th scope=\"col\">Vorname</th><th scope=\"col\">Nachname</th><th scope=\"col\">Pruefungsnummer</th><th scope=\"col\">Ausbilder</th></tr>";
+echo "<table><caption>Ergebnis der Suche der letzten 6 Jahre</caption><tr><th scope=\"col\">Vorname</th><th scope=\"col\">Nachname</th><th scope=\"col\">Pruefungsnummer</th><th scope=\"col\">letzte Pruefung</th><th scope=\"col\">Ausbilder</th></tr>";
 	while($i<$x)
 	{
 		echo "<tr><td>".$erg[$i].$tdetd.$erg[$i+1].$tdetd.$erg[$i+2].$tdetd.$erg[$i+3].$tdetd.$erg[$i+4]."</td><tr>";

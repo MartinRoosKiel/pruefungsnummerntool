@@ -240,10 +240,11 @@ function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
     $stm->bind_param("sssi", $vorname, $name, $datum, $ausbilderId);
     $stm->execute();
     $erg = $stm->get_result();
+	
+    $stm->close();
     if (!$erg) {
         die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
     }
-    $stm->close();
 }
 
 /**

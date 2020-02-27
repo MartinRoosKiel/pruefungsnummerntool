@@ -236,7 +236,7 @@ function eintragen_pruefung($name, $vorname, $kurs, $level, $ausbilderId) {
  */
 function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
     $sql = "INSERT INTO `wiederholung` (`Vorname`,`Nachname`,`Datum`,`AusbilderId`) VALUES (?,?,?,?)";
-    $stm = Dbi::$con - prepare($sql);
+    $stm = Dbi::$con->prepare($sql);
     $stm->bind_param("sssi", $vorname, $name, $datum, $ausbilderId);
     $stm->execute();
     $erg = $stm->get_result();

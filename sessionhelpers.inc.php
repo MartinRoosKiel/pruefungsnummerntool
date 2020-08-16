@@ -243,9 +243,6 @@ function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
     $erg = $stm->get_result();
 	
     $stm->close();
-    if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
-    }
 }
 
 /**

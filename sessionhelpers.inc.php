@@ -240,7 +240,7 @@ function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
     $stm = Dbi::$con->prepare($sql);
     $stm->bind_param("sssi", $vorname, $name, $datum, $ausbilderId);
     $stm->execute();
-    $erg = $stm->get_result();
+    $stm->get_result();
 	
     $stm->close();
 }

@@ -38,7 +38,7 @@ function get_brevet($nachname, $vorname) {
 
     $rV = [];
 
-    $stm = DBi::$con->prepare("Select Vorname, Nachname, Nummer, Datum, Ausbilder from ( ( Select wh.Vorname as Vorname, wh.Nachname as Nachname, wh.Datum as Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userid = wh.AusbilderId ) union ( Select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse kr on pr.Kurs = kr.id join users us on pr.AusbilderId = us.UserId ) ) as daten where Vorname LIKE ? and Nachname Like ? and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year))) group by Vorname, Nachname;");
+    $stm = DBi::$con->prepare("Select Vorname, Nachname, Nummer, Datum, Ausbilder from ( ( Select wh.Vorname as Vorname, wh.Nachname as Nachname, max(wh.Datum) as Datum, pr.Nummer, us.Name as Ausbilder from wiederholung wh join pruefung pr on wh.Nachname = pr.Name and pr.Vorname = wh.Vorname join users us on us.userid = wh.AusbilderId group by wh.vorname, wh.nachname) union ( Select pr.Vorname as Vorname, pr.Name as Nachname, kr.ende as Datum, pr.Nummer as Nummer, us.Name as Ausbilder from pruefung pr join kurse kr on pr.Kurs = kr.id join users us on pr.AusbilderId = us.UserId ) ) as daten where Vorname LIKE ? and Nachname Like ? and Datum > (SELECT Date(DATE_SUB(now(), INTERVAL 6 Year))) group by Vorname, Nachname;");
 
     $stm->bind_param("ss", $wildVorname, $wildNachname);
     $stm->execute();

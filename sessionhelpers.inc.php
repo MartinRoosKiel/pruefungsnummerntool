@@ -563,10 +563,10 @@ function change_userdata($name, $email, $userID) {
  * @param string $userID
  * @return void
  */
-function change_userdata2($userName, $email, $userID, $name, $asr, $atr) {
-    $sql = "UPDATE users SET UserName = ?,UserMail = ?,Name = ?, ASR = ?, ATR = ? Where UserID = ?";
+function change_userdata2($userName, $email, $userID, $level, $name, $asr, $atr) {
+    $sql = "UPDATE users SET UserName = ?,UserMail = ?, UserLevel = ?, Name = ?, ASR = ?, ATR = ? Where UserID = ?";
     $stmt = mysqli_prepare(DBi::$conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sssssi", $userName, $email, $name, $asr, $atr, $userID);
+    mysqli_stmt_bind_param($stmt, "ssssssi", $userName, $email, $level, $name, $asr, $atr, $userID);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $erg);
     mysqli_stmt_close($stmt);

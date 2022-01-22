@@ -335,6 +335,7 @@ function eintragen_wiederholung($name, $vorname, $datum, $ausbilderId) {
     $stmt->bind_param("sssi", $vorname, $name, $datum, $ausbilderId);
     $stmt->execute();
     $stmt->close();
+    return "Wiederholung eingetragen!";
 }
 
 /**
@@ -592,6 +593,7 @@ function change_pass($pass, $userID) {
     if (!$erg) {
         die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
     }
+    return "Passwortänderungen übernommen!";
 }
 
 /**

@@ -608,9 +608,8 @@ function delete_user($name, $level) {
     $stmt->execute();
     $erg = $stmt->affected_rows;
     if (!$erg) {
-        echo "Ergebnis: $erg";
+        echo "Ergebnis: $erg ";
         echo UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql;
-        echo "Variablen waren: $name und $level";
         die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     } else {
         return 'Nutzer entfernt!';

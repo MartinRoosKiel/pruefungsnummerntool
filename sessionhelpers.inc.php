@@ -142,7 +142,7 @@ function get_statistik_bySQL($array) {
         $stmt2->close();
 
         $sql2 = $sqlTemplate . "'%-S%' ";
-        $ $count = 0;
+        $count = 0;
         $stmt2 = DBi::$conn->prepare($sql2);
         $stmt2->execute();
         $stmt2->bind_result($count);

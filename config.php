@@ -16,18 +16,31 @@ if (logged_in()) {
 
     $usrl = $_SESSION['usrlevel'];
     $userId = $_SESSION['userid'];
+
     if (isset($_POST['email'])) {
         $eMail = $_POST['email'];
     }
     if (isset($_POST['username'])) {
         $user = $_POST['username'];
     }
+    if (isset($_POST['pass'])) {
+        $paa = $_POST['pass'];
+    }
+    if (isset($_POST['name'])) {
+        $name = $_POST['name'];
+    }
+    if (isset($_POST['asr'])) {
+        $asr = $_POST['asr'];
+    }
+    if (isset($_POST['atr'])) {
+        $atr = $_POST['atr'];
+    }
 
     if (isset($_POST['change'])) {
         if ($usrl > 2) {
-            echo change_userdata2($user, $eMail, $userId, $_POST['name'], $_POST['asr'], $_POST['atr']);
+            echo change_userdata2($user, $eMail, $userId, $level, $name, $asr, $atr);
         } else {
-            echo change_userdata($user, $eMail, $userId, "", "", "");
+            echo change_userdata($user, $eMail, $userId);
         }
     }
 
@@ -36,10 +49,10 @@ if (logged_in()) {
     }
     if ($usrl > 2) {
         if (isset($_POST['insertUser'])) {
-            echo insert_user2($user, $_POST['name'], $_POST['pass'], $_POST['email'], $_POST['level'], $_POST['atr'], $_POST['asr']);
+            echo insert_user2($user, $name, $pass, $eMail, $level, $atr, $asr);
         }
         if (isset($_POST['deleteUser'])) {
-            echo delete_user($user, $_POST['level']);
+            echo delete_user($user, $usrl);
         }
     }
 

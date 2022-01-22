@@ -626,7 +626,6 @@ function delete_user($name, $level) {
  * @return boolean
  */
 function insert_user($username, $name, $pass, $email, $level, $atr, $asr) {
-    echo $username . ", " . $name . ", " . $pass . ", " . $email . ", " . $level . ", " . $atr . ", " . $asr;
     $md5Pass = md5($pass);
     $sql = "INSERT INTO `users`(`UserName`, `Name`, `UserPass`, `UserMail`, `UserLevel`, `ATR`, `ASR`)VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare(DBi::$conn, $sql);

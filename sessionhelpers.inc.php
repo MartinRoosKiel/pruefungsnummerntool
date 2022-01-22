@@ -554,6 +554,26 @@ function change_userdata($name, $email, $userID) {
     if (!$erg) {
         die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
     }
+    return "Änderungen übernommen!";
+}
+
+/**
+ * @param string $name
+ * @param string $email
+ * @param string $userID
+ * @return void
+ */
+function change_userdata2($userName, $email, $userID, $name, $asr, $atr) {
+    $sql = "UPDATE users SET UserName = ?,UserMail = ?,Name = ?, ASR = ?, ATR = ? Where UserID = ?";
+    $stmt = mysqli_prepare(DBi::$conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssi", $userName, $email, $name, $asr, $atr, $userID);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $erg);
+    mysqli_stmt_close($stmt);
+    if (!$erg) {
+        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+    }
+    return "Änderungen übernommen!";
 }
 
 /**

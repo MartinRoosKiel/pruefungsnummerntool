@@ -81,7 +81,7 @@ echo '<hr>';
 $trtd = "<tr><td>";
 $tdetd = "</td><td>";
 $tdetre = "</td></tr>";
-$tab = $tab;
+$tab = "<table>";
 $tabe = "</table>";
 
 if (isset($_POST['submit'])) {

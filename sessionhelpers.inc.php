@@ -552,7 +552,7 @@ function change_userdata($name, $email, $userID) {
     mysqli_stmt_bind_result($stmt, $erg);
     mysqli_stmt_close($stmt);
     if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+        die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     }
     return "Änderungen übernommen!";
 }
@@ -571,7 +571,7 @@ function change_userdata2($userName, $email, $userID, $level, $name, $asr, $atr)
     mysqli_stmt_bind_result($stmt, $erg);
     mysqli_stmt_close($stmt);
     if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+        die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     }
     return "Änderungen übernommen!";
 }
@@ -590,7 +590,7 @@ function change_pass($pass, $userID) {
     mysqli_stmt_bind_result($stmt, $erg);
     mysqli_stmt_close($stmt);
     if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+        die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     }
     return "Passwortänderungen übernommen!";
 }
@@ -603,12 +603,15 @@ function change_pass($pass, $userID) {
 function delete_user($name, $level) {
 
     $sql = "DELETE from `users` WHERE `UserName` = ? AND `UserLevel` = ?";
-    $stmt = DBi::$conn->prepare($sql);
+    $stmt = mysqli_prepare(DBi::$conn, $sql);
     $stmt->bind_param("si", $name, $level);
     $stmt->execute();
-    $stmt->bind_result($erg);
+    $erg = $stmt->affected_rows;
     if (!$erg) {
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+        echo "Ergebnis: $erg";
+        echo UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql;
+        echo "Variablen waren: $name und $level";
+        die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     } else {
         return 'Nutzer entfernt!';
     }
@@ -619,19 +622,21 @@ function delete_user($name, $level) {
  * @param string $pass
  * @param string $email
  * @param string $level
+
+
  * @return boolean
  */
 function insert_user($username, $name, $pass, $email, $level, $atr, $asr) {
     echo $username . ", " . $name . ", " . $pass . ", " . $email . ", " . $level . ", " . $atr . ", " . $asr;
     $md5Pass = md5($pass);
-    $sql = "INSERT INTO `users`(`UserName`,`Name`,`UserPass`,`UserMail`,`UserLevel`,`ATR`,`ASR`)VALUES (?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO `users`(`UserName`, `Name`, `UserPass`, `UserMail`, `UserLevel`, `ATR`, `ASR`)VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare(DBi::$conn, $sql);
-    $stmt->bind_param($stmt, "ssssiss", $username, $name, $md5Pass, $email, $level, $atr, $asr);
+    $stmt->bind_param("ssssiss", $username, $name, $md5Pass, $email, $level, $atr, $asr);
     $stmt->execute();
     $stmt->bind_result($erg);
     if (!$erg) {
-        echo UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql;
-        die(UNGAB . mysqli_error(DBi::$con) . UNGABSQL . $sql);
+        echo UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql;
+        die(UNGAB . mysqli_error(DBi::$conn) . UNGABSQL . $sql);
     } else {
         return 'Neuer Nutzer eingetragen!';
     }
@@ -640,11 +645,13 @@ function insert_user($username, $name, $pass, $email, $level, $atr, $asr) {
 /**
  * @param string $name
  * @param string $pass
+
+
  * @return boolean
  */
 function check_user($name, $pass) {
     $md5Pass = md5($pass);
-    $stmt = mysqli_prepare(DBi::$conn, "SELECT UserId FROM users WHERE UserName = ? AND UserPass=?");
+    $stmt = mysqli_prepare(DBi::$conn, "SELECT UserId FROM users WHERE UserName = ? AND UserPass = ?");
     mysqli_stmt_bind_param($stmt, "ss", $name, $md5Pass);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $id);
@@ -657,6 +664,8 @@ function check_user($name, $pass) {
 
 /**
  * @param int $userid
+
+
  * @return void
  */
 function login($userid) {
@@ -664,7 +673,8 @@ function login($userid) {
     $stmt = mysqli_prepare(DBi::$conn, "UPDATE users SET UserSession = ? WHERE UserId = ?");
     mysqli_stmt_bind_param($stmt, "si", $session, $userid);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_close($stmt
+    );
 }
 
 /**
@@ -689,6 +699,8 @@ function logged_in() {
  * @return void
  */
 function logout() {
+
+
 
     $session = session_id();
     $stmt = mysqli_prepare(DBi::$conn, "UPDATE users SET UserSession = '' WHERE UserSession = ?");

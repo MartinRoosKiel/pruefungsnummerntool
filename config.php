@@ -24,7 +24,7 @@ if (logged_in()) {
         $user = $_POST['username'];
     }
     if (isset($_POST['pass'])) {
-        $paa = $_POST['pass'];
+        $pass = $_POST['pass'];
     }
     if (isset($_POST['name'])) {
         $name = $_POST['name'];
@@ -35,10 +35,13 @@ if (logged_in()) {
     if (isset($_POST['atr'])) {
         $atr = $_POST['atr'];
     }
+    if (isset($_POST['alevel'])) {
+        $alevel = $_POST['alevel'];
+    }
 
     if (isset($_POST['change'])) {
         if ($usrl > 2) {
-            echo change_userdata2($user, $eMail, $userId, $level, $name, $asr, $atr);
+            echo change_userdata2($user, $eMail, $userId, $alevel, $name, $asr, $atr);
         } else {
             echo change_userdata($user, $eMail, $userId);
         }
@@ -49,10 +52,10 @@ if (logged_in()) {
     }
     if ($usrl > 2) {
         if (isset($_POST['insertUser'])) {
-            echo insert_user2($user, $name, $pass, $eMail, $level, $atr, $asr);
+            echo insert_user($user, $name, $pass, $eMail, $alevel, $atr, $asr);
         }
         if (isset($_POST['deleteUser'])) {
-            echo delete_user($user, $usrl);
+            echo delete_user($user, $alevel);
         }
     }
 
@@ -83,7 +86,7 @@ eMail: </td><td> <input name="email" type="text" size="80" id="email" value=$zei
 Passwort: </td><td> <input name="pass" type="text" size="80" id="pass">
 </td></tr>
 <tr><td>
-Level: </td><td> <select name="level"><option value = "0">Demo</option><option value = "1">Ansehen</option><option value = "2">Ausbilder</option><option value = "3">Admin</option>
+Level: </td><td> <select name="alevel"><option value = "0">Demo</option><option value = "1">Ansehen</option><option value = "2">Ausbilder</option><option value = "3">Admin</option>
 </td></tr>
 <tr><td>
 END;
@@ -95,7 +98,7 @@ END;
         echo '<input type="submit" name="deleteUser" value="Nutzer entfernen">';
     }
     if ($usrl == 0) {
-        echo 'Im Demomodus sind keine Eintragungen m�glich.';
+        echo 'Im Demomodus sind keine Eintragungen möglich.';
     }
 
     echo '</td></tr></table></form>';

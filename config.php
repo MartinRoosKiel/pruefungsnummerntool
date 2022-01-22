@@ -25,7 +25,7 @@ if (logged_in()) {
 
     if (isset($_POST['change'])) {
         if ($usrl > 2) {
-            echo change_userdata($user, $eMail, $userId, $_POST['name'], $_POST['asr'], $_POST['atr']);
+            echo change_userdata2($user, $eMail, $userId, $_POST['name'], $_POST['asr'], $_POST['atr']);
         } else {
             echo change_userdata($user, $eMail, $userId, "", "", "");
         }
@@ -36,16 +36,12 @@ if (logged_in()) {
     }
     if ($usrl > 2) {
         if (isset($_POST['insertUser'])) {
-            echo insert_user($user, $_POST['name'], $_POST['pass'], $_POST['email'], $_POST['level'], $_POST['atr'], $_POST['asr']);
+            echo insert_user2($user, $_POST['name'], $_POST['pass'], $_POST['email'], $_POST['level'], $_POST['atr'], $_POST['asr']);
         }
         if (isset($_POST['deleteUser'])) {
             echo delete_user($user, $_POST['level']);
         }
     }
-
-
-
-
 
     $zeile = user_data($userId);
 

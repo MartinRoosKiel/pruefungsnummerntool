@@ -461,7 +461,7 @@ function user_data($userID) {
         $rv[4] = $aTR;
     }
 
-    return $rv;
+    return $rV;
 }
 
 /**

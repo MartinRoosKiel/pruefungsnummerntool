@@ -58,7 +58,7 @@ echo '	</p>';
 echo '<p><input  type="submit" name="eintragen" value="Speichern"></p>'; 
 }
 else {
-	echo 'Im Demomodus sind keine Eintragungen mï¿½glich.';
+	echo 'Im Demomodus sind keine Eintragungen möglich.';
 } 
 		
 echo '</fieldset>';

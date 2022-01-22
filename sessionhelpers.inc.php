@@ -44,11 +44,11 @@ function get_brevet($nachname, $vorname) {
 
     $stm->bind_param("ss", $wildVorname, $wildNachname);
     $stm->execute();
-    $stm->bind_result($vorname, $nachname, $nummer, $datum, $ausbilder);
+    $stm->bind_result($rVorname, $rNachname, $nummer, $datum, $ausbilder);
     while ($stm->fetch()) {
 
-        echo $vorname . " " . $nachname . " " . $nummer . " " . $datum . " " . $ausbilder . "<br>";
-        $rV[] = array($vorname, $nachname, $nummer, $datum, $ausbilder);
+        echo $rVorname . " " . $rNachname . " " . $nummer . " " . $datum . " " . $ausbilder . "<br>";
+        $rV[] = array($rVorname, $rNachname, $nummer, $datum, $ausbilder);
     }
     $stm->close();
     return $rV;

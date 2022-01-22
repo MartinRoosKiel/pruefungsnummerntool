@@ -47,8 +47,8 @@ function get_brevet($nachname, $vorname) {
     $stm->bind_result($rVorname, $rNachname, $nummer, $datum, $ausbilder);
     while ($stm->fetch()) {
 
-        echo $rVorname . " " . $rNachname . " " . $nummer . " " . $datum . " " . $ausbilder . "<br>";
-        $rV[] = array($rVorname, $rNachname, $nummer, $datum, $ausbilder);
+        //echo $rVorname . " " . $rNachname . " " . $nummer . " " . $datum . " " . $ausbilder . "<br>";
+        $rV[] = array(htmlentities($rVorname), htmlentities($rNachname), $nummer, $datum, htmlentities($ausbilder));
     }
     $stm->close();
     return $rV;
@@ -227,7 +227,7 @@ function get_statistik_bySQL($array) {
         }
         $stmt2->close();
     }
-    return array("Bronze" => $bronze, "Silber" => $silber, "Gold" => $gold, "Junioretter" => $junior, "Wasserretter" => $retter, "Wachleiter" => $leiter, "Bootsf&uuml;hrer See" => $bs, "Bootsf&uuml;rer Binnen" => $bb, "Ausbilder Schwimmen und Rettungsschwimmen" => $asr, "Multiplikator Wasserretter" => $multiwr);
+    return array("Bronze" => $bronze, "Silber" => $silber, "Gold" => $gold, "Junioretter" => $junior, "Wasserretter" => $retter, "Wachleiter" => $leiter, "Bootsf&uuml;hrer See" => $bs, "Bootsf&uuml;hrer Binnen" => $bb, "Ausbilder Schwimmen und Rettungsschwimmen" => $asr, "Multiplikator Wasserretter" => $multiwr);
 }
 
 /**
@@ -493,7 +493,7 @@ function listeKurse($array) {
 
     $rString = "";
     foreach ($array as $id => $kursInfo) {
-        $rString .= $trtd . $kursInfo[0] . $tdetd . $kursInfo[1] . $tdetd . $kursInfo[2] . $tdetd . $kursInfo[3] . $tdetd . $kursInfo[4] . $tdetre;
+        $rString .= $trtd . $kursInfo[0] . $tdetd . $kursInfo[1] . $tdetd . $kursInfo[2] . $tdetd . htmlentities($kursInfo[3]) . $tdetd . $kursInfo[4] . $tdetre;
     }
     return $rString;
 }
@@ -534,7 +534,7 @@ function ausbilderSelector($array) {
     $rString = "";
 
     foreach ($array as $id => $name) {
-        $rString .= "<option value=$id> $name</option>";
+        $rString .= "<option value=$id>" . htmlspecialchars($name) . "</option>";
     }
     return $rString;
 }

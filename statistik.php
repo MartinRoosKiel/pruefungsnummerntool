@@ -81,6 +81,7 @@ echo '<hr>';
 $trtd = "<tr><td>";
 $tdetd = "</td><td>";
 $tdetre = "</td></tr>";
+$tab = $tab;
 $tabe = "</table>";
 
 if (isset($_POST['submit'])) {
@@ -91,7 +92,7 @@ if (isset($_POST['submit'])) {
     echo "<table><caption>Statistik f&uuml;r das Jahr " . $jahr . " </caption><tr><th scope=\"col\">Abnahmen pro Kurs</th><td width=30></td><th scope =\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
     $erg = get_pruefungen($jahr);
 
-    echo "<table>";
+    echo $tab;
     foreach ($erg as $kurs => $anzahl) {
         echo $trtd . $kurs . $tdetd . $anzahl . $tdetre;
     }
@@ -99,7 +100,7 @@ if (isset($_POST['submit'])) {
 
     $erg = get_statistik($jahr);
 
-    echo "<table>";
+    echo $tab;
     foreach ($erg as $level => $anzahl) {
         echo $trtd . $level . $tdetd . $anzahl . $tdetre;
     }
@@ -112,7 +113,7 @@ if (isset($_POST['go'])) {
     echo "<table><caption>Statistik f&uuml;r das Jahr " . $jahr . " und den LV / OV " . $lvov . "</caption><tr><th scope=\"col\">Abnahmen pro Kurs</th><td width=30></td><th scope=\"col\">gesamt Abnahmen</th></tr><tr><td valign=\"top\">";
     $erg = get_pruefungen_lvov($jahr, htmlspecialchars($lvov));
 
-    echo "<table>";
+    echo $tab;
     foreach ($erg as $kurs => $anzahl) {
         echo $trtd . $kurs . $tdetd . $anzahl . $tdetre;
     }
@@ -121,7 +122,7 @@ if (isset($_POST['go'])) {
 
     $erg = get_statistik_LVOV($jahr, $lvov);
 
-    echo "<table>";
+    echo $tab;
     foreach ($erg as $level => $anzahl) {
         echo $trtd . $level . $tdetd . $anzahl . $tdetre;
     }

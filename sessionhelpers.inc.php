@@ -47,7 +47,6 @@ function get_brevet($nachname, $vorname) {
     $stm->bind_result($rVorname, $rNachname, $nummer, $datum, $ausbilder);
     while ($stm->fetch()) {
 
-        //echo $rVorname . " " . $rNachname . " " . $nummer . " " . $datum . " " . $ausbilder . "<br>";
         $rV[] = array(htmlentities($rVorname), htmlentities($rNachname), $nummer, $datum, htmlentities($ausbilder));
     }
     $stm->close();

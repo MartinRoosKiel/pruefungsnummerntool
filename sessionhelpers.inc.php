@@ -16,7 +16,7 @@ define("UNGABSQL", " sql:");
 function connect() {
 
     DBi::$conn = new mysqli('rdbms.strato.de', USERNAME, PASSWORD, TABLE);
-    // Check connection
+// Check connection
     if (!DBi::$conn) {
         echo "db-Connection failed!";
         die("Connection failed: " . mysqli_connect_error());
@@ -112,7 +112,61 @@ function get_statistik($jahr) {
     return get_statistik_bySQL($erg);
 }
 
+function get_statistik_bySQL_child($var, $sql) {
+    $count = 0;
+    $stmt2 = DBi::$conn->prepare($sql);
+    $stmt2->execute();
+    $stmt2->bind_result($count);
+    while ($stmt2->fetch()) {
+        $var = $var + $count;
+    }
+    $stmt2->close();
+    return $var;
+}
+
 function get_statistik_bySQL($array) {
+
+
+    $bronze = 0;
+    $silber = 0;
+    $gold = 0;
+    $junior = 0;
+    $retter = 0;
+    $leiter = 0;
+    $bs = 0;
+    $bb = 0;
+    $asr = 0;
+    $multiwr = 0;
+
+    foreach ($array as $id => $bemerkung) {
+
+        $sqlTemplate = "SELECT count(*) from `pruefung` WHERE `Kurs`= $id and `Nummer` LIKE ";
+
+        $bronze = get_statistik_bySQL_child($bronze, $sqlTemplate . "'%-B%' ");
+
+        $silber = get_statistik_bySQL_child($silber, $sqlTemplate . "'%-S%' ");
+
+        $gold = get_statistik_bySQL_child($gold, $sqlTemplate . "'%-G%' ");
+
+        $junior = get_statistik_bySQL_child($junior, $sqlTemplate . "'%-J%' ");
+
+        $retter = get_statistik_bySQL_child($retter, $sqlTemplate . "'%-WR%' ");
+
+        $leiter = get_statistik_bySQL_child($leiter, $sqlTemplate . "'%-WL%' ");
+
+        $bs = get_statistik_bySQL_child($bs, $sqlTemplate . "'%-BS%' ");
+
+        $bb = get_statistik_bySQL_child($bb, $sqlTemplate . "'%-BB%' ");
+
+        $asr = get_statistik_bySQL_child($asr, $sqlTemplate . "'%-asr%' ");
+
+        $multiwr = get_statistik_bySQL_child($multiwr, $sqlTemplate . "'%-mw%' ");
+    }
+
+    return array("Bronze" => $bronze, "Silber" => $silber, "Gold" => $gold, "Junioretter" => $junior, "Wasserretter" => $retter, "Wachleiter" => $leiter, "Bootsf&uuml;hrer See" => $bs, "Bootsf&uuml;hrer Binnen" => $bb, "Ausbilder Schwimmen und Rettungsschwimmen" => $asr, "Multiplikator Wasserretter" => $multiwr);
+}
+
+function get_statistik_bySQL2($array) {
 
 
     $bronze = 0;
